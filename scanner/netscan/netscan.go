@@ -130,7 +130,7 @@ func (s *systemScanner) Scan() error {
 			if !(stringInSlice(state, ioc.State)) {
 				continue
 			}
-			report.AddStringf("Found netstat %v -- IOC for %s", e, ioc.Description)
+			report.AddStringf("Found netstat TCP %v -- IOC for %s", e, ioc.Description)
 		}
 		for _, e := range usocks {
 			//fmt.Printf("%v\n", e)
@@ -161,7 +161,7 @@ func (s *systemScanner) Scan() error {
 			if !(stringInSlice(state, ioc.State)) {
 				continue
 			}
-			report.AddStringf("Found netstat %v -- IOC for %s", e, ioc.Description)
+			report.AddStringf("Found netstat UDP %v -- IOC for %s", e, ioc.Description)
 		}
 	}
 	return nil
