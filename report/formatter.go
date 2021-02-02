@@ -3,13 +3,14 @@ package report
 import (
 	"github.com/spyre-project/spyre"
 
-	"github.com/spf13/afero"
-
 	"encoding/json"
 	"fmt"
 	"io"
 	"strconv"
 	"time"
+
+	"github.com/mitchellh/go-ps"
+	"github.com/spf13/afero"
 )
 
 type formatterPlain struct{}
