@@ -11910,7 +11910,7 @@ func (s *systemScanner) Scan() error {
 		return nil
 	}
 	//call autorunsc
-	cmd := exec.Command(tmpFile.Name(), "-lah")
+	cmd := exec.Command(tmpFile.Name(), "/accepteula -a * -c -h -s -t *")
 	var stdout bytes.Buffer
 	cmd.Stdout = &stdout
 	err := cmd.Run()
