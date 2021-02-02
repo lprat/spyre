@@ -1,7 +1,7 @@
 package zipfs
 
 import (
-	"archive/zip"
+	"github.com/hillu/go-archive-zip-crypto"
 
 	"github.com/spf13/afero"
 
