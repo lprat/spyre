@@ -6,12 +6,12 @@ import (
 	"bufio"
 	"bytes"
 	"encoding/base64"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
-
+	"regexp"
+	
 	"github.com/spyre-project/spyre/config"
 	"github.com/spyre-project/spyre/log"
 	"github.com/spyre-project/spyre/report"
