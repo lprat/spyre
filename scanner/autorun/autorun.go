@@ -11,7 +11,7 @@ import (
 	"os/exec"
 	"strings"
 	"regexp"
-	
+
 	"github.com/spyre-project/spyre/config"
 	"github.com/spyre-project/spyre/log"
 	"github.com/spyre-project/spyre/report"
@@ -11911,14 +11911,12 @@ func (s *systemScanner) Scan() error {
 	}
 	//call autorunsc
 	cmd := exec.Command(tmpFile.Name(), "/accepteula -a * -c -h -s -t *")
-	var stdout bytes.Buffer
-	cmd.Stdout = &stdout
-	err := cmd.Run()
+  stdout, err := cmd.Output()
 	if err != nil {
 		log.Debugf("Error to run autorunsc : %s", err)
 		return nil
 	}
-	outStr := string(stdout.Bytes())
+	outStr := string(stdout)
 	os.Remove(tmpFile.Name())
   scanner := bufio.NewScanner(strings.NewReader(outStr))
   for scanner.Scan() {
