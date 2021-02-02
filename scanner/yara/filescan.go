@@ -64,7 +64,7 @@ func (s *fileScanner) ScanFile(f afero.File) error {
 	var datem = ""
 	if err == nil {
 		date_tmp := fi.ModTime()
-		if date_tmp != nil {
+		if date_tmp {
 			datem = date_tmp.String()
 		}
 	}
