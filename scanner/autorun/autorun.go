@@ -11932,8 +11932,7 @@ func (s *systemScanner) Scan() error {
           if !(strings.Contains(line_val, ioc.Value)) {
             report.AddStringf("Found autorunsc --- %s --- IOC for %s", line_val, ioc.Description)
           }
-        }
-        else if ioc.Type == 2 {
+        } else if ioc.Type == 2 {
           matched, err := regexp.MatchString(ioc.Value, line_val)
 					if err != nil {
 						log.Noticef("Error regexp : %s", err)
@@ -11942,8 +11941,7 @@ func (s *systemScanner) Scan() error {
 					if matched {
 						report.AddStringf("Found autorunsc --- %s --- IOC for %s", line_val, ioc.Description)
 					}
-        }
-        else if ioc.Type == 3 {
+        } else if ioc.Type == 3 {
           matched, err := regexp.MatchString(ioc.Value, line_val)
 					if err != nil {
 						log.Noticef("Error regexp : %s", err)

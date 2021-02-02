@@ -185,9 +185,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 	ki, err := k.Stat()
 	if err == nil {
 		time_tmp := ki.ModTime()
-		if date_tmp != nil {
-			datem = date_tmp.String()
-		}
+		datem = time_tmp.String()
 	}
 	if typex == 0 {
 		//key name exist
