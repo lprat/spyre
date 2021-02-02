@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	yr "github.com/hillu/go-yara/v4"
+	yr "github.com/lprat/go-yara/v4"
 	"github.com/spf13/afero"
 
 	"github.com/spyre-project/spyre/config"
@@ -60,6 +60,14 @@ func (s *fileScanner) ScanFile(f afero.File) error {
 					"max_size", strconv.Itoa(int(config.MaxFileSize)))
 			}
 	*/
+	fi, err := f.Stat()
+	var datem = ""
+	if err == nil {
+		date_tmp := fi.ModTime()
+		if date_tmp != nil {
+			datem = date_tmp.String()
+		}
+	}
 	if f, ok := f.(*os.File); ok {
 		fd := f.Fd()
 		err = s.rules.ScanFileDescriptor(fd, 0, 1*time.Minute, &matches)
@@ -89,8 +97,9 @@ func (s *fileScanner) ScanFile(f afero.File) error {
 			}
 		}
 		matched := strings.Join(matchx[:], " | ")
+
 		report.AddFileInfo(f, "yara", "YARA rule match",
-			"rule", m.Rule, "hash", string(md5sum), "string_match", string(matched))
+			"rule", m.Rule, "hash", string(md5sum), "ModifTime", datem, "string_match", string(matched))
 	}
 	return err
 }

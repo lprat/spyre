@@ -3,8 +3,7 @@ package yara
 import (
 	"strings"
 
-	yr "github.com/hillu/go-yara/v4"
-	"github.com/mitchellh/go-ps"
+	yr "github.com/lprat/go-yara/v4"
 	"github.com/spyre-project/spyre/config"
 	"github.com/spyre-project/spyre/report"
 	"github.com/spyre-project/spyre/scanner"

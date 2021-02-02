@@ -104,7 +104,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 			}
 			if typex == 0 {
 				//key name exist
-				report.AddStringf("Found registry on user %s [%s] -- IOC for %s", f.Name(), key, desc)
+				report.AddStringf("Found registry on user %s [%s] -- Date %v -- IOC for %s", f.Name(), key, xkeys.LastWriteTime(), desc)
 				continue
 			}
 			for _, vals := range xkeys.Values() {
@@ -113,19 +113,19 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 				//log.Noticef("Registre val %s : %#v\n", vals.ValueName(), vals.ValueData())
 				if typex == 1 && namex == name {
 					//key name exist
-					report.AddStringf("Found registry on user %s [%s]%s -> %s -- IOC for %s", f.Name(), key, namex, val, desc)
+					report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
 					continue
 				}
 				if typex == 2 && strings.Contains(namex, name) {
 					// 2 == name contains exist
-					report.AddStringf("Found registry on user %s [%s]%s -> %s -- IOC for %s", f.Name(), key, namex, val, desc)
+					report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
 					continue
 				}
 				if typex == 3 && namex == name {
 					//value Contains
 					res := strings.Contains(val, valuex)
 					if res {
-						report.AddStringf("Found registry on user %s [%s]%s -> %s -- IOC for %s", f.Name(), key, namex, val, desc)
+						report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
 						continue
 					}
 				}
@@ -136,7 +136,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 						continue
 					}
 					if matched {
-						report.AddStringf("Found registry on user %s [%s]%s -> %s -- IOC for %s", f.Name(), key, namex, val, desc)
+						report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
 						continue
 					}
 					continue
@@ -145,7 +145,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 					//value Contains
 					res := strings.Contains(val, valuex)
 					if res {
-						report.AddStringf("Found registry on user %s [%s]%s -> %s -- IOC for %s", f.Name(), key, namex, val, desc)
+						report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
 						continue
 					}
 					continue
@@ -157,7 +157,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 						continue
 					}
 					if matched {
-						report.AddStringf("Found registry on user %s [%s]%s -> %s -- IOC for %s", f.Name(), key, namex, val, desc)
+						report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
 						continue
 					}
 					continue
@@ -181,9 +181,17 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 		return
 	}
 	defer k.Close()
+	var datem = ""
+	ki, err := k.Stat()
+	if err == nil {
+		time_tmp := ki.ModTime()
+		if date_tmp != nil {
+			datem = date_tmp.String()
+		}
+	}
 	if typex == 0 {
 		//key name exist
-		report.AddStringf("Found registry [%s] -- IOC for %s", key, desc)
+		report.AddStringf("Found registry [%s] -- Date %s -- IOC for %s", key, datem, desc)
 		return
 	}
 	switch typex {
@@ -200,7 +208,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 			if typex == 2 {
 				res := strings.Contains(param, name)
 				if res {
-					report.AddStringf("Found registry [%s]%s -- IOC for %s", key, param, desc)
+					report.AddStringf("Found registry [%s]%s -- Date %s -- IOC for %s", key, param, datem, desc)
 					return
 				}
 			}
@@ -212,7 +220,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 				}
 				res := strings.Contains(val, valuex)
 				if res {
-					report.AddStringf("Found registry [%s]%s -> %s -- IOC for %s", key, param, val, desc)
+					report.AddStringf("Found registry [%s]%s -> %s -- Date %s --IOC for %s", key, param, val, datem, desc)
 					return
 				}
 			}
@@ -228,7 +236,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 					return
 				}
 				if matched {
-					report.AddStringf("Found registry [%s]%s -> %s -- IOC for %s", key, param, val, desc)
+					report.AddStringf("Found registry [%s]%s -> %s -- Date %s -- IOC for %s", key, param, val, datem, desc)
 					return
 				}
 			}
@@ -242,14 +250,14 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 	}
 	if typex == 1 {
 		//key name exist
-		report.AddStringf("Found registry [%s]%s-- IOC for %s", key, name, desc)
+		report.AddStringf("Found registry [%s]%s -- Date %s -- IOC for %s", key, name, datem, desc)
 		return
 	}
 	if typex == 3 {
 		//value Contains
 		res := strings.Contains(val, valuex)
 		if res {
-			report.AddStringf("Found registry [%s]%s -> %s -- IOC for %s", key, name, val, desc)
+			report.AddStringf("Found registry [%s]%s -> %s -- Date %s -- IOC for %s", key, name, val, datem, desc)
 			return
 		}
 		return
@@ -261,7 +269,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 			return
 		}
 		if matched {
-			report.AddStringf("Found registry [%s]%s -> %s -- IOC for %s", key, name, val, desc)
+			report.AddStringf("Found registry [%s]%s -> %s -- Date %s -- IOC for %s", key, name, val, datem, desc)
 			return
 		}
 		return

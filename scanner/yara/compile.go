@@ -4,7 +4,7 @@ import (
 	"github.com/spyre-project/spyre/config"
 	"github.com/spyre-project/spyre/log"
 
-	yr "github.com/hillu/go-yara/v4"
+	yr "github.com/lprat/go-yara/v4"
 	"github.com/spf13/afero"
 
 	"io/ioutil"
@@ -71,8 +71,7 @@ var extvars = map[int]extvardefs{
 		"pid":        -1,
 		"executable": "",
 	},
-	evtxscan: extvardefs{
-	},
+	evtxscan: extvardefs{},
 }
 
 func compile(purpose int, inputfiles []string) (*yr.Rules, error) {

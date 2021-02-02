@@ -1,7 +1,7 @@
 package yara
 
 import (
-	yr "github.com/hillu/go-yara/v4"
+	yr "github.com/lprat/go-yara/v4"
 
 	"github.com/spyre-project/spyre/config"
 	"github.com/spyre-project/spyre/report"
