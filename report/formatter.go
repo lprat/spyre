@@ -51,7 +51,7 @@ func (f *formatterPlain) formatEvtxEntry(w io.Writer, evt string, description, m
 
 func (f *formatterPlain) formatProcEntry(w io.Writer, p ps.Process, description, message string, extra ...string) {
 	//f.emitTimeStamp(w)
-	fmt.Fprintf(w, "%s %s %s: %s[%d]: %s%s\n", time.Now().Format(time.RFC3339), spyre.Hostname,, description, p.Executable(), p.Pid(), message, fmtExtra(extra))
+	fmt.Fprintf(w, "%s %s %s: %s[%d]: %s%s\n", time.Now().Format(time.RFC3339), spyre.Hostname, description, p.Executable(), p.Pid(), message, fmtExtra(extra))
 	//w.Write([]byte{'\n'})
 }
 
