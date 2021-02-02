@@ -4,7 +4,6 @@ package autorun
 
 import (
 	"bufio"
-	"bytes"
 	"encoding/base64"
 	"io/ioutil"
 	"os"
