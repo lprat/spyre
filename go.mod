@@ -7,7 +7,7 @@ require (
 	github.com/0xrawsec/golang-utils v1.1.8
 	github.com/cakturk/go-netstat v0.0.0-20200220111822-e5b49efee7a5
 	github.com/hillu/go-archive-zip-crypto v0.0.0-20200712202847-bd5cf365dd44
-	github.com/hillu/go-yara/v4 v4.0.4
+	github.com/lprat/go-yara/v4 v4.0.5
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/prometheus/common v0.15.0
 	github.com/spf13/afero v1.5.1
