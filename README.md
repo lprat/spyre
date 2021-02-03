@@ -7,7 +7,9 @@
  - registry scan ioc (excepted HKCU of not current user already opened by system)
  - event windows scan by yara rules
  - netstat scan ioc
+ - autorun scan ioc (from autorunsc sysinternals for windows only)
  - change order of scan (ioc->mem->evtx->fs)
+ - jsonl result by default
 
 ***...a simple, self-contained modular host-based IOC scanner***
 
@@ -249,6 +251,14 @@ rule windows_defender {
 E.G:
 ```
 {
+  "autorun":
+  [
+    {
+      "value":".*",
+      "type":2,
+      "description":"Get all autorun"
+    }
+  ],
   "registry-keys":
   [
     {
@@ -312,7 +322,12 @@ You can use type search:
   - 5: Key + Contains value (check all names under key)
   - 6: Key + Contains value (check all names under key)
 
-## Coding
+#### Autorun rules
+  You can use type search:
+    - 0: contains value
+    - 1: not contains value
+    - 2: match regexp (value)
+    - 3: not match regexp (value)
 
 See [HACKING.md](HACKING.md)
 
@@ -320,7 +335,7 @@ See [HACKING.md](HACKING.md)
 
 Copyright 2018-2020 DCSO Deutsche Cyber-Sicherheitsorganisation GmbH
 
-Copyright 2020      Spyre Project Authors (see: AUTHORS.txt)
+Copyright 2020-2021      Spyre Project Authors (see: AUTHORS.txt)
 
 ## License
 
