@@ -38,7 +38,7 @@ func (s *procScanner) ScanProc(proc ps.Process) error {
 			return err
 		}
 	}
-	err := s.rules.ScanProc(pid, yr.ScanFlagsProcessMemory, 3*time.Minute, &matches)
+	err := s.rules.ScanProc(pid, yr.ScanFlagsProcessMemory, 4*time.Minute, &matches)
 	for _, m := range matches {
 		var matchx []string
 		for _, ms := range m.Strings {
