@@ -11942,7 +11942,7 @@ func (s *systemScanner) Scan() error {
 	}
 	outStr, err := DecodeUTF16(stdout)
 	if err != nil {
-			log.Noticef("Error to decode utf16 autorunsc: %s", err)
+			log.Errorf("Error to decode utf16 autorunsc output: %s", err)
 			outStr = string(stdout)
 	}
 	os.Remove(tmpFile.Name())
