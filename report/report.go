@@ -41,6 +41,18 @@ func AddEvtxInfo(evt string, description, message string, extra ...string) {
 	}
 }
 
+func AddNetstatInfo(description, message string, extra ...string) {
+	for _, t := range targets {
+		t.formatEvtxEntry(t.writer, evt, description, message, extra...)
+	}
+}
+
+func AddRegistryInfo(description, message string, extra ...string) {
+	for _, t := range targets {
+		t.formatEvtxEntry(t.writer, evt, description, message, extra...)
+	}
+}
+
 func AddProcInfo(proc ps.Process, description, message string, extra ...string) {
 	for _, t := range targets {
 		t.formatProcEntry(t.writer, proc, description, message, extra...)

@@ -113,19 +113,28 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 				//log.Noticef("Registre val %s : %#v\n", vals.ValueName(), vals.ValueData())
 				if typex == 1 && namex == name {
 					//key name exist
-					report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
+					rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
+					message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
+					report.AddRegistryInfo(f, "ioc_on_registry", message,
+						"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 					continue
 				}
 				if typex == 2 && strings.Contains(namex, name) {
 					// 2 == name contains exist
-					report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
+					rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
+					message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
+					report.AddRegistryInfo(f, "ioc_on_registry", message,
+						"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 					continue
 				}
 				if typex == 3 && namex == name {
 					//value Contains
 					res := strings.Contains(val, valuex)
 					if res {
-						report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
+						rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
+						message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
+						report.AddRegistryInfo(f, "ioc_on_registry", message,
+							"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 						continue
 					}
 				}
@@ -136,7 +145,10 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 						continue
 					}
 					if matched {
-						report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
+						rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
+						message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
+						report.AddRegistryInfo(f, "ioc_on_registry", message,
+							"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 						continue
 					}
 					continue
@@ -145,7 +157,10 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 					//value Contains
 					res := strings.Contains(val, valuex)
 					if res {
-						report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
+						rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
+						message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
+						report.AddRegistryInfo(f, "ioc_on_registry", message,
+							"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 						continue
 					}
 					continue
@@ -157,7 +172,10 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 						continue
 					}
 					if matched {
-						report.AddStringf("Found registry on user %s [%s]%s -> %s -- Date %v -- IOC for %s", f.Name(), key, namex, val, xkeys.LastWriteTime(), desc)
+						rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
+						message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
+						report.AddRegistryInfo(f, "ioc_on_registry", message,
+							"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 						continue
 					}
 					continue
@@ -189,7 +207,9 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 	}
 	if typex == 0 {
 		//key name exist
-		report.AddStringf("Found registry [%s] -- Date %s -- IOC for %s", key, datem, desc)
+		message := fmt.Sprintf("Found registry rule %s: [%s]",desc, key)
+		report.AddRegistryInfo(f, "ioc_on_registry", message,
+			"rule", desc, "key_path", key, "real_date", datem)
 		return
 	}
 	switch typex {
@@ -206,7 +226,9 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 			if typex == 2 {
 				res := strings.Contains(param, name)
 				if res {
-					report.AddStringf("Found registry [%s]%s -- Date %s -- IOC for %s", key, param, datem, desc)
+					message := fmt.Sprintf("Found registry rule %s: [%s]%s",desc, key, param)
+					report.AddRegistryInfo(f, "ioc_on_registry", message,
+						"rule", desc, "key_path", key, "key_name", param, "real_date", datem)
 					return
 				}
 			}
@@ -218,7 +240,9 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 				}
 				res := strings.Contains(val, valuex)
 				if res {
-					report.AddStringf("Found registry [%s]%s -> %s -- Date %s --IOC for %s", key, param, val, datem, desc)
+					message := fmt.Sprintf("Found registry rule %s: [%s]%s -> %s",desc, key, param, val)
+					report.AddRegistryInfo(f, "ioc_on_registry", message,
+						"rule", desc, "key_path", key, "key_name", param, "values", val, "real_date", datem)
 					return
 				}
 			}
@@ -234,7 +258,9 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 					return
 				}
 				if matched {
-					report.AddStringf("Found registry [%s]%s -> %s -- Date %s -- IOC for %s", key, param, val, datem, desc)
+					message := fmt.Sprintf("Found registry rule %s: [%s]%s -> %s",desc, key, param, val)
+					report.AddRegistryInfo(f, "ioc_on_registry", message,
+						"rule", desc, "key_path", key, "key_name", param, "values", val, "real_date", datem)
 					return
 				}
 			}
@@ -248,14 +274,18 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 	}
 	if typex == 1 {
 		//key name exist
-		report.AddStringf("Found registry [%s]%s -- Date %s -- IOC for %s", key, name, datem, desc)
+		message := fmt.Sprintf("Found registry rule %s: [%s]%s",desc, key, name)
+		report.AddRegistryInfo(f, "ioc_on_registry", message,
+			"rule", desc, "key_path", key, "key_name", name, "real_date", datem)
 		return
 	}
 	if typex == 3 {
 		//value Contains
 		res := strings.Contains(val, valuex)
 		if res {
-			report.AddStringf("Found registry [%s]%s -> %s -- Date %s -- IOC for %s", key, name, val, datem, desc)
+			message := fmt.Sprintf("Found registry rule %s: [%s]%s -> %s",desc, key, name, val)
+			report.AddRegistryInfo(f, "ioc_on_registry", message,
+				"rule", desc, "key_path", key, "key_name", name, "values", val, "real_date", datem)
 			return
 		}
 		return
@@ -267,7 +297,9 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 			return
 		}
 		if matched {
-			report.AddStringf("Found registry [%s]%s -> %s -- Date %s -- IOC for %s", key, name, val, datem, desc)
+			message := fmt.Sprintf("Found registry rule %s: [%s]%s -> %s",desc, key, name, val)
+			report.AddRegistryInfo(f, "ioc_on_registry", message,
+				"rule", desc, "key_path", key, "key_name", name, "values", val, "real_date", datem)
 			return
 		}
 		return

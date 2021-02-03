@@ -43,6 +43,20 @@ func (f *formatterPlain) formatFileEntry(w io.Writer, file afero.File, descripti
 	//w.Write([]byte{'\n'})
 }
 
+func (f *formatterPlain) formatNetstatEntry(w io.Writer, description, message string, extra ...string) {
+	// send directly all for avoid anomalie formated line
+	//f.emitTimeStamp(w)
+	fmt.Fprintf(w, "%s %s %s: %s%s\n", time.Now().Format(time.RFC3339), spyre.Hostname, description, message, fmtExtra(extra))
+	//w.Write([]byte{'\n'})
+}
+
+func (f *formatterPlain) formatRegistryEntry(w io.Writer, description, message string, extra ...string) {
+	// send directly all for avoid anomalie formated line
+	//f.emitTimeStamp(w)
+	fmt.Fprintf(w, "%s %s %s: %s%s\n", time.Now().Format(time.RFC3339), spyre.Hostname, description, message, fmtExtra(extra))
+	//w.Write([]byte{'\n'})
+}
+
 func (f *formatterPlain) formatEvtxEntry(w io.Writer, evt string, description, message string, extra ...string) {
 	// send directly all for avoid anomalie formated line
 	//f.emitTimeStamp(w)
@@ -105,9 +119,19 @@ func (f *formatterTSJSON) formatEvtxEntry(w io.Writer, evt string, description, 
 	f.emitRecord(w, extra...)
 }
 
+func (f *formatterTSJSON) formatNetstatEntry(w io.Writer, description, message string, extra ...string) {
+	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
+	f.emitRecord(w, extra...)
+}
+
+func (f *formatterTSJSON) formatRegistryEntry(w io.Writer, description, message string, extra ...string) {
+	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
+	f.emitRecord(w, extra...)
+}
+
 func (f *formatterTSJSON) formatProcEntry(w io.Writer, p ps.Process, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
-	extra = append(extra, "executable", p.Executable(), "pid", strconv.Itoa(p.Pid()))
+	extra = append(extra, "Process", p.Executable(), "PID", strconv.Itoa(p.Pid()))
 	f.emitRecord(w, extra...)
 }
 
@@ -130,7 +154,9 @@ func (f *formatterTSJSONLines) emitRecord(w io.Writer, kv ...string) {
 	r := make(map[string]string)
 	r["timestamp"] = strconv.Itoa(int(now.UnixNano() / 1000))
 	r["datetime"] = now.Format(time.RFC3339)
-	r["hostname"] = spyre.Hostname
+	//keep plaso name field
+	r["computer_name"] = spyre.Hostname
+	r["file_generator"] = "Spyre"
 	for it := kv; len(it) >= 2; it = it[2:] {
 		r[it[0]] = it[1]
 	}

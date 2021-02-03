@@ -147,9 +147,9 @@ func ScanProc(proc ps.Process) (err error) {
 	return
 }
 
-func ScanEvtx(evt string) (err error) {
+func ScanEvtx(evt string, jsonval []byte) (err error) {
 	for _, s := range evtxScanners {
-		if e := s.ScanEvtx(evt); err == nil && e != nil {
+		if e := s.ScanEvtx(evt, jsonval); err == nil && e != nil {
 			err = e
 		}
 	}

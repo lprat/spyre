@@ -103,14 +103,24 @@ func (s *systemScanner) Scan() error {
 		//netCheck(ioc.Dip, ioc.Sip, ioc.Sport, ioc.Dport, ioc.Pname, ioc.State)
 		for _, e := range tsocks {
 			//fmt.Printf("%v\n", e)
+			pid := "unknown"
+			proc_name := "unknown"
+			port_src := fmt.Sprintf("%d", e.LocalAddr.Port)
+			port_dst := fmt.Sprintf("%d", e.RemoteAddr.Port)
+			uid := fmt.Sprintf("%d", e.UID)
+
 			if !(strings.EqualFold(ioc.Proto, "tcp") || ioc.Proto == "*" || ioc.Proto == "") {
 				continue
 			}
-			if e.Process != nil && !(stringInSlice(e.Process.Name, ioc.Pname)) {
-				continue
-			}
-			if e.Process != nil && nstringInSlice(e.Process.Name, ioc.NPname) {
-				continue
+			if e.Process != nil {
+				proc_name = fmt.Sprintf("%s", e.Process.Name)
+				pid = fmt.Sprintf("%d", e.Process.Pid)
+				if !(stringInSlice(e.Process.Name, ioc.Pname)) {
+				  continue
+			  }
+				if nstringInSlice(e.Process.Name, ioc.NPname) {
+					continue
+				}
 			}
 			dip := e.RemoteAddr.IP.String()
 			if !(stringInSlice(dip, ioc.Dip)) {
@@ -130,18 +140,29 @@ func (s *systemScanner) Scan() error {
 			if !(stringInSlice(state, ioc.State)) {
 				continue
 			}
-			report.AddStringf("Found netstat TCP %v -- IOC for %s", e, ioc.Description)
+			message := fmt.Sprintf("Found netstat rule: %s on TCP %v",ioc.Description, e)
+			report.AddNetstatInfo(f, "ioc_on_netstat", message,
+				"rule", ioc.Description, "State", state, "ip_src", sip, "ip_dst", dip, "uid", uid, "PID", pid, "Process", proc_name, "port_dst", port_dst, "port_src", port_src, "proto", "TCP")
 		}
 		for _, e := range usocks {
+			pid := "unknown"
+			proc_name := "unknown"
+			port_src := fmt.Sprintf("%d", e.LocalAddr.Port)
+			port_dst := fmt.Sprintf("%d", e.RemoteAddr.Port)
+			uid := fmt.Sprintf("%d", e.UID)
 			//fmt.Printf("%v\n", e)
 			if !(strings.EqualFold(ioc.Proto, "udp") || ioc.Proto == "*" || ioc.Proto == "") {
 				continue
 			}
-			if e.Process != nil && !(stringInSlice(e.Process.Name, ioc.Pname)) {
-				continue
-			}
-			if e.Process != nil && nstringInSlice(e.Process.Name, ioc.NPname) {
-				continue
+			if e.Process != nil {
+				proc_name = fmt.Sprintf("%s", e.Process.Name)
+				pid = fmt.Sprintf("%d", e.Process.Pid)
+				if !(stringInSlice(e.Process.Name, ioc.Pname)) {
+				  continue
+			  }
+				if nstringInSlice(e.Process.Name, ioc.NPname) {
+					continue
+				}
 			}
 			dip := e.RemoteAddr.IP.String()
 			if !(stringInSlice(dip, ioc.Dip)) {
@@ -161,7 +182,9 @@ func (s *systemScanner) Scan() error {
 			if !(stringInSlice(state, ioc.State)) {
 				continue
 			}
-			report.AddStringf("Found netstat UDP %v -- IOC for %s", e, ioc.Description)
+			message := fmt.Sprintf("Found netstat rule: %s on UDP %v",ioc.Description, e)
+			report.AddNetstatInfo(f, "ioc_on_netstat", message,
+				"rule", ioc.Description, "State", state, "ip_src", sip, "ip_dst", dip, "uid", uid, "PID", pid, "Process", proc_name, "port_dst", port_dst, "port_src", port_src, "proto", "UDP")
 		}
 	}
 	return nil

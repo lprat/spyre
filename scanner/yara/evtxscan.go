@@ -8,6 +8,7 @@ import (
 	"github.com/spyre-project/spyre/scanner"
 
 	"time"
+	"encoding/json"
 )
 
 func init() { scanner.RegisterEvtxScanner(&evtxScanner{}) }
@@ -22,15 +23,57 @@ func (s *evtxScanner) Init() error {
 	return err
 }
 
-func (s *evtxScanner) ScanEvtx(evt string) error {
+func (s *evtxScanner) ScanEvtx(evt string, jsonval []byte) error {
 	var (
 		matches yr.MatchRules
 		err     error
 	)
 	err = s.rules.ScanMem([]byte(evt), 0, 1*time.Minute, &matches)
 	for _, m := range matches {
-		report.AddEvtxInfo(evt, "yara", "YARA rule match",
-			"rule", m.Rule)
+    var data map[string]interface{}
+		err = json.Unmarshal(jsonData, &data)
+    if err != nil {
+        log.Errorf("Error to read evtx json : %s", err)
+    }
+		event_id := "Unknown"
+		source_name := "Unknown"
+		event_date := "Unknown"
+		event_level := "Unknown"
+		event_sid := "Unknown"
+		if val, ok := data["Event"]; ok {
+       if evtmap, ok := val.(map[string]interface{}); ok {
+				 if val2, ok := evtmap["System"]; ok {
+					 if sysmap, ok := val2.(map[string]interface{}); ok {
+						  if valx, ok := sysmap["EventID"]; ok {
+                event_id = valx
+					    }
+							if valx, ok := sysmap["Channel"]; ok {
+                source_name = valx
+					    }
+							if valx, ok := sysmap["Level"]; ok {
+                event_level = valx
+					    }
+							if val3, ok := sysmap["TimeCreated"]; ok {
+								if datemap, ok := val3.(map[string]interface{}); ok {
+									if valx, ok := datemap["SystemTime"]; ok {
+                    event_date = valx
+								  }
+							  }
+					    }
+							if val3, ok := sysmap["Security"]; ok {
+								if secmap, ok := val3.(map[string]interface{}); ok {
+									if valx, ok := secmap["UserID"]; ok {
+                    event_sid = valx
+								  }
+							  }
+					    }
+					 }
+         }
+			 }
+		}
+		message := m.Rule + " (yara) matched on event windows: " + event_id + "(" + source_name + ")" + "[" + event_level + "]"
+		report.AddEvtxInfo(evt, "yara_on_eventlog", message,
+			"rule", m.Rule, "event_level", event_level, "event_identifier", event_id, "source_name", source_name, "real_date", event_date, "event_sid", event_sid)
 	}
 	return err
 }

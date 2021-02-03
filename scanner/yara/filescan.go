@@ -95,9 +95,9 @@ func (s *fileScanner) ScanFile(f afero.File) error {
 			}
 		}
 		matched := strings.Join(matchx[:], " | ")
-
-		report.AddFileInfo(f, "yara", "YARA rule match",
-			"rule", m.Rule, "hash", string(md5sum), "ModifTime", datem, "string_match", string(matched))
+    message := m.Rule + " (yara) matched on file: " + f.Name() + " (" + string(md5sum) + ")"
+		report.AddFileInfo(f, "yara_on_file", message,
+			"rule", m.Rule, "Filehash", string(md5sum), "real_date", datem, "Filepath", f.Name(), "string_match", string(matched))
 	}
 	return err
 }

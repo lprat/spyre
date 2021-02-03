@@ -47,7 +47,8 @@ func (s *procScanner) ScanProc(proc ps.Process) error {
 			}
 		}
 		matched := strings.Join(matchx[:], " | ")
-		report.AddProcInfo(proc, "yara", "YARA rule match", "rule", m.Rule, "string_match", string(matched))
+		message := m.Rule+" (yara) matched on process: "+p.Executable()
+		report.AddProcInfo(proc, "yara_on_pid", message, "rule", m.Rule, "string_match", string(matched))
 	}
 	return err
 }
