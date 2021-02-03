@@ -17,7 +17,7 @@ var (
 	Paths              simpleStringSlice
 	EvtxPaths          simpleStringSlice
 	MaxFileSize        = fileSize(32 * 1024 * 1024)
-	ReportTargets      = simpleStringSlice([]string{"spyre.log"})
+	ReportTargets      = simpleStringSlice([]string{"spyre.jsonl"})
 	Hostname           string
 	HighPriority       bool
 	YaraFailOnWarnings bool
