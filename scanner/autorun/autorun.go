@@ -11885,34 +11885,33 @@ func (s *systemScanner) Init() error {
 func (s *systemScanner) Scan() error {
 	tmpFile, err := ioutil.TempFile(os.TempDir(), "acss-*.exe")
 	if err != nil {
-		log.Debugf("Error to create temporary file to write autorunsc : %s", err)
+		log.Errorf("Error to create temporary file to write autorunsc : %s", err)
 		return nil
 	}
 
 	dec, err := base64.StdEncoding.DecodeString(b64)
 	if err != nil {
-		log.Debugf("Error to decode base64 autorunsc : %s", err)
+		log.Errorf("Error to decode base64 autorunsc : %s", err)
 		return nil
 	}
 
 	if _, err := tmpFile.Write(dec); err != nil {
-		log.Debugf("Error to write autorunsc : %s", err)
+		log.Errorf("Error to write autorunsc : %s", err)
 		return nil
 	}
 	if err := tmpFile.Sync(); err != nil {
-		log.Debugf("Error to sync file autorunsc : %s", err)
+		log.Errorf("Error to sync file autorunsc : %s", err)
 		return nil
 	}
 	// Close the file
 	if err := tmpFile.Close(); err != nil {
-		log.Debugf("Error to close file autorunsc : %s", err)
+		log.Errorf("Error to close file autorunsc : %s", err)
 		return nil
 	}
 	//call autorunsc
-	cmd := exec.Command(tmpFile.Name(), "/accepteula -a * -c -h -s -t *")
-  stdout, err := cmd.Output()
+	stdout, err := exec.Command(tmpFile.Name(), "/accepteula", "-a", "*", "-c", "-h", "-s", "-t", "*").Output()
 	if err != nil {
-		log.Debugf("Error to run autorunsc : %s", err)
+		log.Errorf("Error to run autorunsc : %s", err)
 		return nil
 	}
 	outStr := string(stdout)
@@ -11932,7 +11931,7 @@ func (s *systemScanner) Scan() error {
         } else if ioc.Type == 2 {
           matched, err := regexp.MatchString(ioc.Value, line_val)
 					if err != nil {
-						log.Noticef("Error regexp : %s", err)
+						log.Noticef("Error regexp in autorun rule: %s", err)
 						continue
 					}
 					if matched {
@@ -11941,7 +11940,7 @@ func (s *systemScanner) Scan() error {
         } else if ioc.Type == 3 {
           matched, err := regexp.MatchString(ioc.Value, line_val)
 					if err != nil {
-						log.Noticef("Error regexp : %s", err)
+						log.Noticef("Error regexp in autorun rule: %s", err)
 						continue
 					}
 					if !(matched) {
@@ -11951,7 +11950,7 @@ func (s *systemScanner) Scan() error {
       }
   }
   if err := scanner.Err(); err != nil {
-			log.Debugf("Error to parse result autorunsc : %s", err)
+			log.Errorf("Error to parse result autorunsc : %s", err)
 	}
 	return nil
 }
