@@ -43,13 +43,13 @@ func AddEvtxInfo(evt string, description, message string, extra ...string) {
 
 func AddNetstatInfo(description, message string, extra ...string) {
 	for _, t := range targets {
-		t.formatEvtxEntry(t.writer, evt, description, message, extra...)
+		t.formatNetstatEntry(t.writer, description, message, extra...)
 	}
 }
 
 func AddRegistryInfo(description, message string, extra ...string) {
 	for _, t := range targets {
-		t.formatEvtxEntry(t.writer, evt, description, message, extra...)
+		t.formatRegistryEntry(t.writer, description, message, extra...)
 	}
 }
 

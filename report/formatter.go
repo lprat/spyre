@@ -179,9 +179,19 @@ func (f *formatterTSJSONLines) formatEvtxEntry(w io.Writer, evt string, descript
 	f.emitRecord(w, extra...)
 }
 
+func (f *formatterTSJSONLines) formatNetstatEntry(w io.Writer, description, message string, extra ...string) {
+	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
+	f.emitRecord(w, extra...)
+}
+
+func (f *formatterTSJSONLines) formatRegistryEntry(w io.Writer, description, message string, extra ...string) {
+	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
+	f.emitRecord(w, extra...)
+}
+
 func (f *formatterTSJSONLines) formatProcEntry(w io.Writer, p ps.Process, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
-	extra = append(extra, "executable", p.Executable(), "pid", strconv.Itoa(p.Pid()))
+	extra = append(extra, "Process", p.Executable(), "PID", strconv.Itoa(p.Pid()))
 	f.emitRecord(w, extra...)
 }
 

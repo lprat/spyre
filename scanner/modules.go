@@ -41,7 +41,7 @@ type ProcScanner interface {
 type EvtxScanner interface {
 	Name() string
 	Init() error
-	ScanEvtx(string) error
+	ScanEvtx(string, []byte) error
 }
 
 var (
