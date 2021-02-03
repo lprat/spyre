@@ -141,7 +141,7 @@ func (s *systemScanner) Scan() error {
 				continue
 			}
 			message := fmt.Sprintf("Found netstat rule: %s on TCP %v",ioc.Description, e)
-			report.AddNetstatInfo(f, "ioc_on_netstat", message,
+			report.AddNetstatInfo("ioc_on_netstat", message,
 				"rule", ioc.Description, "State", state, "ip_src", sip, "ip_dst", dip, "uid", uid, "PID", pid, "Process", proc_name, "port_dst", port_dst, "port_src", port_src, "proto", "TCP")
 		}
 		for _, e := range usocks {
@@ -183,7 +183,7 @@ func (s *systemScanner) Scan() error {
 				continue
 			}
 			message := fmt.Sprintf("Found netstat rule: %s on UDP %v",ioc.Description, e)
-			report.AddNetstatInfo(f, "ioc_on_netstat", message,
+			report.AddNetstatInfo("ioc_on_netstat", message,
 				"rule", ioc.Description, "State", state, "ip_src", sip, "ip_dst", dip, "uid", uid, "PID", pid, "Process", proc_name, "port_dst", port_dst, "port_src", port_src, "proto", "UDP")
 		}
 	}
