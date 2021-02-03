@@ -65,7 +65,7 @@ func mkTarget(spec string) (target, error) {
 		}
 	}
 	if t.formatter == nil {
-		t.formatter = &formatterPlain{}
+		t.formatter = &formatterTSJSONLines{}
 	}
 	return t, nil
 }
