@@ -115,7 +115,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 					//key name exist
 					rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
 					message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
-					report.AddRegistryInfo(f, "ioc_on_registry", message,
+					report.AddRegistryInfo("ioc_on_registry", message,
 						"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 					continue
 				}
@@ -123,7 +123,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 					// 2 == name contains exist
 					rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
 					message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
-					report.AddRegistryInfo(f, "ioc_on_registry", message,
+					report.AddRegistryInfo("ioc_on_registry", message,
 						"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 					continue
 				}
@@ -133,7 +133,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 					if res {
 						rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
 						message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
-						report.AddRegistryInfo(f, "ioc_on_registry", message,
+						report.AddRegistryInfo("ioc_on_registry", message,
 							"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 						continue
 					}
@@ -147,7 +147,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 					if matched {
 						rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
 						message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
-						report.AddRegistryInfo(f, "ioc_on_registry", message,
+						report.AddRegistryInfo("ioc_on_registry", message,
 							"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 						continue
 					}
@@ -159,7 +159,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 					if res {
 						rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
 						message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
-						report.AddRegistryInfo(f, "ioc_on_registry", message,
+						report.AddRegistryInfo("ioc_on_registry", message,
 							"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 						continue
 					}
@@ -174,7 +174,7 @@ func ukeyCheck(key string, name string, valuex string, typex int, desc string) {
 					if matched {
 						rdate := fmt.Sprintf("%v", xkeys.LastWriteTime())
 						message := fmt.Sprintf("Found registry rule %s: on user %s [%s]%s -> %s",desc, f.Name(), key, namex, val)
-						report.AddRegistryInfo(f, "ioc_on_registry", message,
+						report.AddRegistryInfo("ioc_on_registry", message,
 							"rule", desc, "username", f.Name(), "key_path", key, "key_name", namex, "values", val, "real_date", rdate)
 						continue
 					}
@@ -208,7 +208,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 	if typex == 0 {
 		//key name exist
 		message := fmt.Sprintf("Found registry rule %s: [%s]",desc, key)
-		report.AddRegistryInfo(f, "ioc_on_registry", message,
+		report.AddRegistryInfo("ioc_on_registry", message,
 			"rule", desc, "key_path", key, "real_date", datem)
 		return
 	}
@@ -227,7 +227,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 				res := strings.Contains(param, name)
 				if res {
 					message := fmt.Sprintf("Found registry rule %s: [%s]%s",desc, key, param)
-					report.AddRegistryInfo(f, "ioc_on_registry", message,
+					report.AddRegistryInfo("ioc_on_registry", message,
 						"rule", desc, "key_path", key, "key_name", param, "real_date", datem)
 					return
 				}
@@ -241,7 +241,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 				res := strings.Contains(val, valuex)
 				if res {
 					message := fmt.Sprintf("Found registry rule %s: [%s]%s -> %s",desc, key, param, val)
-					report.AddRegistryInfo(f, "ioc_on_registry", message,
+					report.AddRegistryInfo("ioc_on_registry", message,
 						"rule", desc, "key_path", key, "key_name", param, "values", val, "real_date", datem)
 					return
 				}
@@ -259,7 +259,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 				}
 				if matched {
 					message := fmt.Sprintf("Found registry rule %s: [%s]%s -> %s",desc, key, param, val)
-					report.AddRegistryInfo(f, "ioc_on_registry", message,
+					report.AddRegistryInfo("ioc_on_registry", message,
 						"rule", desc, "key_path", key, "key_name", param, "values", val, "real_date", datem)
 					return
 				}
@@ -275,7 +275,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 	if typex == 1 {
 		//key name exist
 		message := fmt.Sprintf("Found registry rule %s: [%s]%s",desc, key, name)
-		report.AddRegistryInfo(f, "ioc_on_registry", message,
+		report.AddRegistryInfo("ioc_on_registry", message,
 			"rule", desc, "key_path", key, "key_name", name, "real_date", datem)
 		return
 	}
@@ -284,7 +284,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 		res := strings.Contains(val, valuex)
 		if res {
 			message := fmt.Sprintf("Found registry rule %s: [%s]%s -> %s",desc, key, name, val)
-			report.AddRegistryInfo(f, "ioc_on_registry", message,
+			report.AddRegistryInfo("ioc_on_registry", message,
 				"rule", desc, "key_path", key, "key_name", name, "values", val, "real_date", datem)
 			return
 		}
@@ -298,7 +298,7 @@ func keyCheck(key string, name string, valuex string, typex int, desc string, ba
 		}
 		if matched {
 			message := fmt.Sprintf("Found registry rule %s: [%s]%s -> %s",desc, key, name, val)
-			report.AddRegistryInfo(f, "ioc_on_registry", message,
+			report.AddRegistryInfo("ioc_on_registry", message,
 				"rule", desc, "key_path", key, "key_name", name, "values", val, "real_date", datem)
 			return
 		}
