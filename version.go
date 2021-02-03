@@ -1,3 +1,3 @@
 package spyre
 
-var Version = "1.2 Forked"
+var Version = "1.3 Forked"
