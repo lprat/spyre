@@ -47,6 +47,12 @@ func AddNetstatInfo(description, message string, extra ...string) {
 	}
 }
 
+func AddAutorunInfo(description, message string, extra ...string) {
+	for _, t := range targets {
+		t.formatAutorunEntry(t.writer, description, message, extra...)
+	}
+}
+
 func AddRegistryInfo(description, message string, extra ...string) {
 	for _, t := range targets {
 		t.formatRegistryEntry(t.writer, description, message, extra...)

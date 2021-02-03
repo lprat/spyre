@@ -57,6 +57,13 @@ func (f *formatterPlain) formatRegistryEntry(w io.Writer, description, message s
 	//w.Write([]byte{'\n'})
 }
 
+func (f *formatterPlain) formatAutorunEntry(w io.Writer, description, message string, extra ...string) {
+	// send directly all for avoid anomalie formated line
+	//f.emitTimeStamp(w)
+	fmt.Fprintf(w, "%s %s %s: %s%s\n", time.Now().Format(time.RFC3339), spyre.Hostname, description, message, fmtExtra(extra))
+	//w.Write([]byte{'\n'})
+}
+
 func (f *formatterPlain) formatEvtxEntry(w io.Writer, evt string, description, message string, extra ...string) {
 	// send directly all for avoid anomalie formated line
 	//f.emitTimeStamp(w)
@@ -124,6 +131,11 @@ func (f *formatterTSJSON) formatNetstatEntry(w io.Writer, description, message s
 	f.emitRecord(w, extra...)
 }
 
+func (f *formatterTSJSON) formatAutorunEntry(w io.Writer, description, message string, extra ...string) {
+	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
+	f.emitRecord(w, extra...)
+}
+
 func (f *formatterTSJSON) formatRegistryEntry(w io.Writer, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
 	f.emitRecord(w, extra...)
@@ -180,6 +192,11 @@ func (f *formatterTSJSONLines) formatEvtxEntry(w io.Writer, evt string, descript
 }
 
 func (f *formatterTSJSONLines) formatNetstatEntry(w io.Writer, description, message string, extra ...string) {
+	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
+	f.emitRecord(w, extra...)
+}
+
+func (f *formatterTSJSONLines) formatAutorunEntry(w io.Writer, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
 	f.emitRecord(w, extra...)
 }
