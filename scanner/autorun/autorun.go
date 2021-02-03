@@ -11945,7 +11945,7 @@ func (s *systemScanner) Scan() error {
   scanner := bufio.NewScanner(strings.NewReader(outStr))
   for scanner.Scan() {
       line_tmp := scanner.Text()
-			line_val, err := DecodeUTF16(line_tmp)
+			line_val, err := DecodeUTF16([]byte(line_tmp))
 			if err != nil {
 				  log.Noticef("Error to decode utf16 autorunsc: %s", err)
 		      continue
