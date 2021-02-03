@@ -11940,16 +11940,15 @@ func (s *systemScanner) Scan() error {
 		log.Errorf("Error to run autorunsc : %s", err)
 		return nil
 	}
-	outStr := string(stdout)
+	outStr, err := DecodeUTF16(stdout)
+	if err != nil {
+			log.Noticef("Error to decode utf16 autorunsc: %s", err)
+			outStr = string(stdout)
+	}
 	os.Remove(tmpFile.Name())
   scanner := bufio.NewScanner(strings.NewReader(outStr))
   for scanner.Scan() {
-      line_tmp := scanner.Text()
-			line_val, err := DecodeUTF16([]byte(line_tmp))
-			if err != nil {
-				  log.Noticef("Error to decode utf16 autorunsc: %s", err)
-		      continue
-	    }
+      line_val := scanner.Text()
 	    for _, ioc := range s.iocs {
         if ioc.Type == 0 {
           if strings.Contains(line_val, ioc.Value) {
