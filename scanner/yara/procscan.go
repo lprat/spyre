@@ -9,10 +9,31 @@ import (
 	"github.com/spyre-project/spyre/report"
 	"github.com/spyre-project/spyre/scanner"
 
+	"crypto/md5"
+	"encoding/hex"
 	"time"
+	"io"
+	"os"
 )
 
 func init() { scanner.RegisterProcScanner(&procScanner{}) }
+
+func hash_file_md5(filePath string) (string, error) {
+	var returnMD5String string
+	file, err := os.Open(filePath)
+	if err != nil {
+		return returnMD5String, err
+	}
+	defer file.Close()
+	hash := md5.New()
+	if _, err := io.Copy(hash, file); err != nil {
+		return returnMD5String, err
+	}
+	hashInBytes := hash.Sum(nil)[:16]
+	returnMD5String = hex.EncodeToString(hashInBytes)
+	return returnMD5String, nil
+
+}
 
 type procScanner struct{ rules *yr.Rules }
 
@@ -150,21 +171,26 @@ func (s *procScanner) ScanProc(pid int32) error {
 				message = "Error to kill process by "+m.Rule+" (yara) matched on process: "+exe+"["+pathexe+"]("+username+")"
 			}
 		}
+		md5sum, err := hash_file_md5(pathexe)
+		if err {
+		  md5sum = ''
+		}
 		infoproc := []ProcInfo {
 			{"PID", strconv.FormatInt(int64(pid), 10)},
+			{"Filehash", md5sum},
 			{"pathexe", pathexe},
 			{"cmdline", cmdline},
 			{"Process", exe},
 			{"username", username},
-			{"real_date", crt_time},
+			{"real_date", strconv.FormatInt(int64(crt_time),10},
 			{"Parent_pathexe", ppathexe},
 			{"Parent_cmdline", pcmdline},
 			{"Parent_Process", pexe},
 			{"Parent_username", pusername},
-			{"Child_cmdline", child_cmdline},
-			{"Child_pathexe", child_pathexe},
-			{"Child_username", child_username},
-			{"Child_Process", child_exe},
+			{"Child_cmdline", strings.Join(child_cmdline, "|")},
+			{"Child_pathexe", strings.Join(child_pathexe, "|")},
+			{"Child_username", strings.Join(child_username, "|")},
+			{"Child_Process", strings.Join(child_exe, "|")},
 	  }
 		report.AddProcInfo(infoproc, "yara_on_pid", message, "rule", m.Rule, "string_match", string(matched))
 	}

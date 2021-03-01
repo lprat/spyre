@@ -143,7 +143,6 @@ func (f *formatterTSJSON) formatRegistryEntry(w io.Writer, description, message 
 func (f *formatterTSJSON) formatProcEntry(w io.Writer, p []ProcInfo, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
 	for _, x := range p {
-	   fmt.Println(x.name)
 		 extra = append(extra, x.name, x.value)
 	}
 	f.emitRecord(w, extra...)
@@ -211,7 +210,6 @@ func (f *formatterTSJSONLines) formatRegistryEntry(w io.Writer, description, mes
 func (f *formatterTSJSONLines) formatProcEntry(w io.Writer, p []ProcInfo, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
 	for _, x := range p {
-	   fmt.Println(x.name)
 		 extra = append(extra, x.name, x.value)
 	}
 	f.emitRecord(w, extra...)

@@ -12054,7 +12054,7 @@ func (s *systemScanner) Scan() error {
 						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
 							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
 							"autorun_company", csv_company, "image_file", csv_image_path,
-							"autorun_version", csv_version, "auotrun_launch", csv_launch_string,
+							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
 						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
 						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
           }
@@ -12066,7 +12066,7 @@ func (s *systemScanner) Scan() error {
 						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
 							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
 							"autorun_company", csv_company, "image_file", csv_image_path,
-							"autorun_version", csv_version, "auotrun_launch", csv_launch_string,
+							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
 						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
 						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
           }
@@ -12083,7 +12083,7 @@ func (s *systemScanner) Scan() error {
 						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
 							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
 							"autorun_company", csv_company, "image_file", csv_image_path,
-							"autorun_version", csv_version, "auotrun_launch", csv_launch_string,
+							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
 						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
 						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
 					}
@@ -12100,7 +12100,7 @@ func (s *systemScanner) Scan() error {
 						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
 							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
 							"autorun_company", csv_company, "image_file", csv_image_path,
-							"autorun_version", csv_version, "auotrun_launch", csv_launch_string,
+							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
 						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
 						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
 					}

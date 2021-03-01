@@ -11,7 +11,7 @@ var targets []target
 
 type ProcInfo struct {
 	name  string
-	value interface{}
+	value string
 }
 
 func Init() error {
