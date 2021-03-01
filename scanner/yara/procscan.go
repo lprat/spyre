@@ -142,6 +142,14 @@ func (s *procScanner) ScanProc(pid int32) error {
 		}
 		matched := strings.Join(matchx[:], " | ")
 		message := m.Rule+" (yara) matched on process: "+exe+"["+pathexe+"]("+username+")"
+		if strings.HasPrefix("m.Rule", "kill_") {
+			err = handle.Kill()
+			if err == nil {
+			  message = "Killed process by "+m.Rule+" (yara) matched on process: "+exe+"["+pathexe+"]("+username+")"
+			} else {
+				message = "Error to kill process by "+m.Rule+" (yara) matched on process: "+exe+"["+pathexe+"]("+username+")"
+			}
+		}
 		infoproc := []struct {
 		  name  string
 		  value interface{}
