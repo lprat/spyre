@@ -87,7 +87,7 @@ func main() {
 		log.Errorf("Error while enumerating processes: %v", err)
 	} else {
 		for _, proc := range procs {
-			if proc == ourpid {
+			if int(proc) == ourpid {
 				log.Debugf("Skipping process spyre: %d.", proc)
 				continue
 			}
