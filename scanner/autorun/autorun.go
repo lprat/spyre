@@ -12050,7 +12050,7 @@ func (s *systemScanner) Scan() error {
           if strings.Contains(line_val, ioc.Value) {
 						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
 						report.AddNetstatInfo("ioc_on_autorun", message,
-							"rule", ioc.Description, "real_time", csv_time, "entry_location", csv_entryloc,
+							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
 						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
 							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
 							"autorun_company", csv_company, "image_file", csv_image_path,
@@ -12062,7 +12062,7 @@ func (s *systemScanner) Scan() error {
           if !(strings.Contains(line_val, ioc.Value)) {
 						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
 						report.AddNetstatInfo("ioc_on_autorun", message,
-							"rule", ioc.Description, "real_time", csv_time, "entry_location", csv_entryloc,
+							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
 						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
 							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
 							"autorun_company", csv_company, "image_file", csv_image_path,
@@ -12079,7 +12079,7 @@ func (s *systemScanner) Scan() error {
 					if matched {
 						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
 						report.AddNetstatInfo("ioc_on_autorun", message,
-							"rule", ioc.Description, "real_time", csv_time, "entry_location", csv_entryloc,
+							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
 						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
 							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
 							"autorun_company", csv_company, "image_file", csv_image_path,
@@ -12096,7 +12096,7 @@ func (s *systemScanner) Scan() error {
 					if !(matched) {
 						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
 						report.AddNetstatInfo("ioc_on_autorun", message,
-							"rule", ioc.Description, "real_time", csv_time, "entry_location", csv_entryloc,
+							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
 						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
 							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
 							"autorun_company", csv_company, "image_file", csv_image_path,

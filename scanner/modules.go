@@ -4,7 +4,6 @@ import (
 	"github.com/spyre-project/spyre/log"
 	"github.com/spyre-project/spyre/config"
 
-	"github.com/mitchellh/go-ps"
 	"github.com/spf13/afero"
 	// Pull in scan modules
 	"errors"
@@ -33,7 +32,7 @@ type FileScanner interface {
 type ProcScanner interface {
 	Name() string
 	Init() error
-	ScanProc(ps.Process) error
+	ScanProc(int32) error
 }
 
 // EvtxScanner scans are run after SystemScanner scans. The ScanExtx
@@ -138,7 +137,7 @@ func ScanFile(f afero.File) (err error) {
 	return
 }
 
-func ScanProc(proc ps.Process) (err error) {
+func ScanProc(proc int32) (err error) {
 	for _, s := range procScanners {
 		if e := s.ScanProc(proc); err == nil && e != nil {
 			err = e

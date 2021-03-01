@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/hillu/go-archive-zip-crypto"
-	"github.com/mitchellh/go-ps"
+	"github.com/shirou/gopsutil/v3/process"
 	"github.com/spf13/afero"
 
 	"github.com/spyre-project/spyre"
@@ -82,24 +82,18 @@ func main() {
 	}
 
 	// process scan first
-	procs, err := ps.Processes()
+	procs, err := process.Pids()
 	if err != nil {
 		log.Errorf("Error while enumerating processes: %v", err)
 	} else {
 		for _, proc := range procs {
-			pid := proc.Pid()
-			exe := proc.Executable()
-			if pid == ourpid {
-				log.Debugf("Skipping process %s[%d].", exe, pid)
+			if proc == ourpid {
+				log.Debugf("Skipping process spyre: %d.", proc)
 				continue
 			}
-			if sliceContains(config.ProcIgnoreList, exe) {
-				log.Debugf("Skipping process (found on ignore list) %s[%d].", exe, pid)
-				continue
-			}
-			log.Debugf("Scanning process %s[%d]...", exe, pid)
+			log.Debugf("Scanning process pid: %d...", proc)
 			if err := scanner.ScanProc(proc); err != nil {
-				log.Errorf("Error scanning %s[%d]: %v", exe, pid, err)
+				log.Errorf("Error scanning pid -> %d: %v", proc, err)
 			}
 		}
 	}

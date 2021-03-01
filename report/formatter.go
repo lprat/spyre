@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/mitchellh/go-ps"
 	"github.com/spf13/afero"
 )
 
@@ -71,9 +70,9 @@ func (f *formatterPlain) formatEvtxEntry(w io.Writer, evt string, description, m
 	//w.Write([]byte{'\n'})
 }
 
-func (f *formatterPlain) formatProcEntry(w io.Writer, p ps.Process, description, message string, extra ...string) {
+func (f *formatterPlain) formatProcEntry(w io.Writer, p []struct, description, message string, extra ...string) {
 	//f.emitTimeStamp(w)
-	fmt.Fprintf(w, "%s %s %s: %s[%d]: %s%s\n", time.Now().Format(time.RFC3339), spyre.Hostname, description, p.Executable(), p.Pid(), message, fmtExtra(extra))
+	fmt.Fprintf(w, "%s %s %s: %v: %s%s\n", time.Now().Format(time.RFC3339), spyre.Hostname, description, p, message, fmtExtra(extra))
 	//w.Write([]byte{'\n'})
 }
 
@@ -141,9 +140,12 @@ func (f *formatterTSJSON) formatRegistryEntry(w io.Writer, description, message 
 	f.emitRecord(w, extra...)
 }
 
-func (f *formatterTSJSON) formatProcEntry(w io.Writer, p ps.Process, description, message string, extra ...string) {
+func (f *formatterTSJSON) formatProcEntry(w io.Writer, p []struct, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
-	extra = append(extra, "Process", p.Executable(), "PID", strconv.Itoa(p.Pid()))
+	for _, x := range p {
+	   fmt.Println(x.name)
+		 extra = append(extra, x.name, x.value)
+	}
 	f.emitRecord(w, extra...)
 }
 
@@ -206,9 +208,12 @@ func (f *formatterTSJSONLines) formatRegistryEntry(w io.Writer, description, mes
 	f.emitRecord(w, extra...)
 }
 
-func (f *formatterTSJSONLines) formatProcEntry(w io.Writer, p ps.Process, description, message string, extra ...string) {
+func (f *formatterTSJSONLines) formatProcEntry(w io.Writer, p []struct, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
-	extra = append(extra, "Process", p.Executable(), "PID", strconv.Itoa(p.Pid()))
+	for _, x := range p {
+	   fmt.Println(x.name)
+		 extra = append(extra, x.name, x.value)
+	}
 	f.emitRecord(w, extra...)
 }
 
