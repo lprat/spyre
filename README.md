@@ -4,6 +4,8 @@
 
 *** Modified spyre project to add some feature:***
  - yara match indicate information strings matched
+ - process get informations (path, child, parent, cmdline)
+ - process can be killed by yara rule
  - registry scan ioc (excepted HKCU of not current user already opened by system)
  - event windows scan by yara rules
  - netstat scan ioc
@@ -218,6 +220,25 @@ Running `make release` creates a ZIP file that contains those binaries
 for all supported architectures.
 
 ## Write rules
+### Process rule
+You can use variables informations passed to yara:
+  - pid: pid number (String)
+  - pathexe: executable path (String)
+  - cmdline: command line for start process (String)
+  - executable: name of process
+  - username: username who runned process
+  - ppid: parent pid (String)
+  - ppathexe: parent executable path (String)
+  - pcmdline: command line for start parent process (String)
+  - pexecutable: name of parent process
+  - pusername: username who runned parent process
+  - cpathexe: children executable path - separed by "|" (String)
+  - ccmdline: command line for start children process - separed by "|" (String)
+  - cexecutable: name of children process - separed by "|" (String)
+  - cusername: username who runned children process - separed by "|" (String)
+
+You can kill processus matched by yara rule if you rename rule with prefix "kill_", e.g.: kill_emotet {} .
+  
 ### YARA Evtx
 E.G:
 ```
