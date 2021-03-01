@@ -53,45 +53,45 @@ func (s *procScanner) ScanProc(pid int32) error {
 	}
 	exe, err := handle.Name()
   if err {
-    exe = ''
+    exe = ""
   }
 	if !(stringInSlice(exe, config.ProcIgnoreList)) {
 		return "Skipping process (found on ignore list) %s[%d].", exe, pid
 	}
 	ppid, err := handle.Ppid()
   if err {
-    ppid = ''
+    ppid = ""
   } else {
 		ppid = strconv.FormatInt(int64(ppid), 10)
 	}
 	phandle, err := handle.Parent()
 	pcmdline, err := phandle.Cmdline()
   if err {
-    pcmdline = ''
+    pcmdline = ""
   }
 	pexe, err := phandle.Name()
   if err {
-    pexe = ''
+    pexe = ""
   }
 	ppathexe, err := phandle.Exe()
   if err {
-    ppathexe = ''
+    ppathexe = ""
   }
 	pusername, err := phandle.Username()
   if err {
-    pusername = ''
+    pusername = ""
   }
 	cmdline, err := handle.Cmdline()
   if err {
-    cmdline = ''
+    cmdline = ""
   }
 	pathexe, err := handle.Exe()
   if err {
-    pathexe = ''
+    pathexe = ""
   }
 	username, err := handle.Username()
   if err {
-    username = ''
+    username = ""
   }
 	crt_time, err := handle.CreateTime()
 	if err {
@@ -173,7 +173,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 		}
 		md5sum, err := hash_file_md5(pathexe)
 		if err {
-		  md5sum = ''
+		  md5sum = ""
 		}
 		infoproc := []ProcInfo {
 			{"PID", strconv.FormatInt(int64(pid), 10)},
