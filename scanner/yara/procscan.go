@@ -150,10 +150,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 				message = "Error to kill process by "+m.Rule+" (yara) matched on process: "+exe+"["+pathexe+"]("+username+")"
 			}
 		}
-		infoproc := []struct {
-		  name  string
-		  value interface{}
-	  } {
+		infoproc := []ProcInfo {
 			{"PID", strconv.FormatInt(int64(pid), 10)},
 			{"pathexe", pathexe},
 			{"cmdline", cmdline},

@@ -9,6 +9,11 @@ import (
 
 var targets []target
 
+type ProcInfo struct {
+	name  string
+	value interface{}
+}
+
 func Init() error {
 	for _, spec := range config.ReportTargets {
 		tgt, err := mkTarget(spec)
@@ -58,7 +63,7 @@ func AddRegistryInfo(description, message string, extra ...string) {
 	}
 }
 
-func AddProcInfo(proc []interface{}, description, message string, extra ...string) {
+func AddProcInfo(proc []ProcInfo, description, message string, extra ...string) {
 	for _, t := range targets {
 		t.formatProcEntry(t.writer, proc, description, message, extra...)
 	}
