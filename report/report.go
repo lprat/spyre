@@ -60,7 +60,7 @@ func AddRegistryInfo(description, message string, extra ...string) {
 
 func AddProcInfo(description, message string, extra ...string) {
 	for _, t := range targets {
-		t.formatProcEntry(t.writer, proc, description, message, extra...)
+		t.formatProcEntry(t.writer, description, message, extra...)
 	}
 }
 
