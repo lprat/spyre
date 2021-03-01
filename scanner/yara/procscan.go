@@ -18,6 +18,11 @@ import (
 
 func init() { scanner.RegisterProcScanner(&procScanner{}) }
 
+type ProcInfo struct {
+	name  string
+	value string
+}
+
 func hash_file_md5(filePath string) (string, error) {
 	var returnMD5String string
 	file, err := os.Open(filePath)
@@ -56,7 +61,7 @@ func (s *procScanner) ScanProc(pid int32) error {
     exe = ""
   }
 	if !(stringInSlice(exe, config.ProcIgnoreList)) {
-		return "Skipping process (found on ignore list) "+exe+"["+strconv.FormatInt(int64(pid), 10)+"]."
+		return fmt.Errorf("Skipping process (found on ignore list) %s[%d].",exe,pid)
 	}
 	ppidx, err := handle.Ppid()
 	ppid := ""
