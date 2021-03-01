@@ -197,14 +197,12 @@ func (s *procScanner) ScanProc(pid int32) error {
 		)
 	}
 	if err != nil {
-		message = fmt.Sprintf("Error yara proc scan [%v] on process: %s[%s](%s)",err,exe,pathexe,username)
+		message := fmt.Sprintf("Error yara proc scan [%v] on process: %s[%s](%s)",err,exe,pathexe,username)
 		md5sum, err := hash_file_md5(pathexe)
 		if err != nil {
 		  md5sum = ""
 		}
 		report.AddProcInfo("yara_on_pid", message,
-			"rule", m.Rule,
-			"string_match", string(matched),
 			"PID", strconv.FormatInt(int64(pid), 10),
 			"PPID", ppid,
 			"Filehash", md5sum,
