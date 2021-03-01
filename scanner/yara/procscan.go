@@ -175,7 +175,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 		if err != nil {
 		  md5sum = ""
 		}
-		infoproc := []report.ProcInfo {
+		infoproc := []ProcInfo {
 			{"PID", strconv.FormatInt(int64(pid), 10)},
 			{"Filehash", md5sum},
 			{"pathexe", pathexe},
