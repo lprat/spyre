@@ -142,7 +142,9 @@ func main() {
 	f.Close()
 	IgnorePathValue := strings.Split(string(tmpdata), "\n")
 	fs := afero.NewOsFs()
+	log.Infof("Scan file: %s, pid=%d", spyre.Version, ourpid)
 	for _, path := range config.Paths {
+		log.Infof("Scan fs path: %s", path)
 		afero.Walk(fs, path, func(path string, info os.FileInfo, err error) error {
 			if err != nil {
 				return nil
