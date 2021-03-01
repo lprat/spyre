@@ -56,14 +56,12 @@ func (s *procScanner) ScanProc(pid int32) error {
     exe = ""
   }
 	if !(stringInSlice(exe, config.ProcIgnoreList)) {
-		return "Skipping process (found on ignore list) %s[%d].", exe, pid
+		return "Skipping process (found on ignore list) "+exe+"["+strconv.FormatInt(int64(pid), 10)+"]."
 	}
 	ppidx, err := handle.Ppid()
-	var ppid strings
-  if err != nil {
-    ppid = ""
-  } else {
-		ppid = strconv.FormatInt(int64(ppidx), 10)
+	ppid := ""
+  if err == nil {
+    ppid = strconv.FormatInt(int64(ppidx), 10)
 	}
 	phandle, err := handle.Parent()
 	pcmdline, err := phandle.Cmdline()
@@ -99,10 +97,10 @@ func (s *procScanner) ScanProc(pid int32) error {
     crt_time = 0
   }
 	childrens, err := handle.Children()
-	var child_cmdline []strings
-	var child_pathexe []strings
-	var child_username []strings
-	var child_exe []strings
+	var child_cmdline []string
+	var child_pathexe []string
+	var child_username []string
+	var child_exe []string
   if err == nil {
 	  for _, handlechild := range childrens {
 			cmdline, err := handlechild.Cmdline()
@@ -154,7 +152,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 			return err
 		}
 	}
-	err = s.rules.ScanProc(pid, yr.ScanFlagsProcessMemory, 4*time.Minute, &matches)
+	err = s.rules.ScanProc(int(pid), yr.ScanFlagsProcessMemory, 4*time.Minute, &matches)
 	for _, m := range matches {
 		var matchx []string
 		for _, ms := range m.Strings {
