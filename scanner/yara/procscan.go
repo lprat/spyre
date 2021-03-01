@@ -153,7 +153,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 			return err
 		}
 	}
-	err := s.rules.ScanProc(pid, yr.ScanFlagsProcessMemory, 4*time.Minute, &matches)
+	err = s.rules.ScanProc(pid, yr.ScanFlagsProcessMemory, 4*time.Minute, &matches)
 	for _, m := range matches {
 		var matchx []string
 		for _, ms := range m.Strings {
@@ -182,7 +182,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 			{"cmdline", cmdline},
 			{"Process", exe},
 			{"username", username},
-			{"real_date", strconv.FormatInt(int64(crt_time),10},
+			{"real_date", strconv.FormatInt(int64(crt_time),10)},
 			{"Parent_pathexe", ppathexe},
 			{"Parent_cmdline", pcmdline},
 			{"Parent_Process", pexe},
