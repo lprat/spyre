@@ -2,7 +2,6 @@ package report
 
 import (
 	"github.com/spyre-project/spyre"
-	"github.com/spyre-project/spyre/report"
 
 	"encoding/json"
 	"fmt"

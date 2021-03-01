@@ -1,8 +1,6 @@
 package report
 
 import (
-	"github.com/spyre-project/spyre/report"
-	
 	"github.com/spf13/afero"
 
 	"fmt"
