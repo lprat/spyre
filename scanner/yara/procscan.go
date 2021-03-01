@@ -14,14 +14,10 @@ import (
 	"time"
 	"io"
 	"os"
+	"fmt"
 )
 
 func init() { scanner.RegisterProcScanner(&procScanner{}) }
-
-type ProcInfo struct {
-	name  string
-	value string
-}
 
 func hash_file_md5(filePath string) (string, error) {
 	var returnMD5String string
@@ -179,7 +175,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 		if err != nil {
 		  md5sum = ""
 		}
-		infoproc := []ProcInfo {
+		infoproc := []report.ProcInfo {
 			{"PID", strconv.FormatInt(int64(pid), 10)},
 			{"Filehash", md5sum},
 			{"pathexe", pathexe},
