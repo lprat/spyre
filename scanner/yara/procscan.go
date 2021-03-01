@@ -48,53 +48,54 @@ func (s *procScanner) Init() error {
 func (s *procScanner) ScanProc(pid int32) error {
 	var matches yr.MatchRules
   handle, err := process.NewProcess(pid)
-	if err {
+	if err != nil {
 	    return err
 	}
 	exe, err := handle.Name()
-  if err {
+  if err != nil {
     exe = ""
   }
 	if !(stringInSlice(exe, config.ProcIgnoreList)) {
 		return "Skipping process (found on ignore list) %s[%d].", exe, pid
 	}
-	ppid, err := handle.Ppid()
-  if err {
+	ppidx, err := handle.Ppid()
+	var ppid strings
+  if err != nil {
     ppid = ""
   } else {
-		ppid = strconv.FormatInt(int64(ppid), 10)
+		ppid = strconv.FormatInt(int64(ppidx), 10)
 	}
 	phandle, err := handle.Parent()
 	pcmdline, err := phandle.Cmdline()
-  if err {
+  if err != nil {
     pcmdline = ""
   }
 	pexe, err := phandle.Name()
-  if err {
+  if err != nil {
     pexe = ""
   }
 	ppathexe, err := phandle.Exe()
-  if err {
+  if err != nil {
     ppathexe = ""
   }
 	pusername, err := phandle.Username()
-  if err {
+  if err != nil {
     pusername = ""
   }
 	cmdline, err := handle.Cmdline()
-  if err {
+  if err != nil {
     cmdline = ""
   }
 	pathexe, err := handle.Exe()
-  if err {
+  if err != nil {
     pathexe = ""
   }
 	username, err := handle.Username()
-  if err {
+  if err != nil {
     username = ""
   }
 	crt_time, err := handle.CreateTime()
-	if err {
+	if err != nil {
     crt_time = 0
   }
 	childrens, err := handle.Children()
@@ -172,7 +173,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 			}
 		}
 		md5sum, err := hash_file_md5(pathexe)
-		if err {
+		if err != nil {
 		  md5sum = ""
 		}
 		infoproc := []ProcInfo {
