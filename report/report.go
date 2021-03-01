@@ -1,13 +1,17 @@
 package report
 
 import (
-	"github.com/spyre-project/spyre/config"
 	"github.com/spyre-project/spyre/log"
 
 	"github.com/spf13/afero"
 )
 
 var targets []target
+
+type ProcInfo struct {
+  name  string
+	value interface{}
+}
 
 func Init() error {
 	for _, spec := range config.ReportTargets {

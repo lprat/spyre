@@ -2,7 +2,6 @@ package report
 
 import (
 	"github.com/spyre-project/spyre"
-  "github.com/spyre-project/spyre/config"
 
 	"encoding/json"
 	"fmt"
@@ -14,6 +13,11 @@ import (
 )
 
 type formatterPlain struct{}
+
+type ProcInfo struct {
+  name  string
+	value interface{}
+}
 
 func (f *formatterPlain) emitTimeStamp(w io.Writer) {
 	w.Write([]byte(time.Now().Format(time.RFC3339) + " " + spyre.Hostname + " "))

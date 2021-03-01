@@ -1,8 +1,6 @@
 package report
 
 import (
-  "github.com/spyre-project/spyre/config"
-	
 	"github.com/spf13/afero"
 
 	"fmt"
@@ -10,6 +8,11 @@ import (
 	"net/url"
 	"strings"
 )
+
+type ProcInfo struct {
+  name  string
+	value interface{}
+}
 
 type formatter interface {
 	formatFileEntry(w io.Writer, f afero.File, description, message string, extra ...string)

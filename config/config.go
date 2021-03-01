@@ -35,11 +35,6 @@ var (
 // This can be provided through a ZIP file appended to the binary.
 var Fs afero.Fs
 
-type ProcInfo struct {
-  name  string
-	value interface{}
-}
-
 func Init() error {
 	Paths = simpleStringSlice(defaultPaths)
 	EvtxPaths = simpleStringSlice(defaultEvtxPaths)
