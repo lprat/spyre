@@ -179,6 +179,7 @@ func (s *procScanner) ScanProc(pid int32) error {
 			"rule", m.Rule,
 			"string_match", string(matched),
 			"PID", strconv.FormatInt(int64(pid), 10),
+			"PPID", ppid,
 			"Filehash", md5sum,
 			"pathexe", pathexe,
 			"cmdline", cmdline,
