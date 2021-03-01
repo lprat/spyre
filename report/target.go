@@ -9,14 +9,9 @@ import (
 	"strings"
 )
 
-type ProcInfo struct {
-  name  string
-	value interface{}
-}
-
 type formatter interface {
 	formatFileEntry(w io.Writer, f afero.File, description, message string, extra ...string)
-	formatProcEntry(w io.Writer, p []ProcInfo, description, message string, extra ...string)
+	formatProcEntry(w io.Writer, p []interface{}, description, message string, extra ...string)
 	formatEvtxEntry(w io.Writer, evt string, description, message string, extra ...string)
 	formatNetstatEntry(w io.Writer, description, message string, extra ...string)
 	formatAutorunEntry(w io.Writer, description, message string, extra ...string)
