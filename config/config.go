@@ -8,7 +8,6 @@ import (
 
 	"github.com/spyre-project/spyre"
 	"github.com/spyre-project/spyre/log"
-	"github.com/spyre-project/spyre/config"
 
 	"os"
 	"strings"
