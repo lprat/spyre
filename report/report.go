@@ -58,7 +58,7 @@ func AddRegistryInfo(description, message string, extra ...string) {
 	}
 }
 
-func AddProcInfo(proc []struct, description, message string, extra ...string) {
+func AddProcInfo(proc []ProcInfo, description, message string, extra ...string) {
 	for _, t := range targets {
 		t.formatProcEntry(t.writer, proc, description, message, extra...)
 	}

@@ -8,6 +8,7 @@ import (
 
 	"github.com/spyre-project/spyre"
 	"github.com/spyre-project/spyre/log"
+	"github.com/spyre-project/spyre/config"
 
 	"os"
 	"strings"
@@ -33,6 +34,11 @@ var (
 // Fs is the "filesystem" in which configuration and rules are found.
 // This can be provided through a ZIP file appended to the binary.
 var Fs afero.Fs
+
+type ProcInfo struct {
+  name  string
+	value interface{}
+}
 
 func Init() error {
 	Paths = simpleStringSlice(defaultPaths)

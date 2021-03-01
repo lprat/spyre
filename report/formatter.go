@@ -2,6 +2,7 @@ package report
 
 import (
 	"github.com/spyre-project/spyre"
+  "github.com/spyre-project/spyre/config"
 
 	"encoding/json"
 	"fmt"
@@ -70,7 +71,7 @@ func (f *formatterPlain) formatEvtxEntry(w io.Writer, evt string, description, m
 	//w.Write([]byte{'\n'})
 }
 
-func (f *formatterPlain) formatProcEntry(w io.Writer, p []struct, description, message string, extra ...string) {
+func (f *formatterPlain) formatProcEntry(w io.Writer, p []ProcInfo, description, message string, extra ...string) {
 	//f.emitTimeStamp(w)
 	fmt.Fprintf(w, "%s %s %s: %v: %s%s\n", time.Now().Format(time.RFC3339), spyre.Hostname, description, p, message, fmtExtra(extra))
 	//w.Write([]byte{'\n'})
@@ -140,7 +141,7 @@ func (f *formatterTSJSON) formatRegistryEntry(w io.Writer, description, message 
 	f.emitRecord(w, extra...)
 }
 
-func (f *formatterTSJSON) formatProcEntry(w io.Writer, p []struct, description, message string, extra ...string) {
+func (f *formatterTSJSON) formatProcEntry(w io.Writer, p []ProcInfo, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
 	for _, x := range p {
 	   fmt.Println(x.name)
@@ -208,7 +209,7 @@ func (f *formatterTSJSONLines) formatRegistryEntry(w io.Writer, description, mes
 	f.emitRecord(w, extra...)
 }
 
-func (f *formatterTSJSONLines) formatProcEntry(w io.Writer, p []struct, description, message string, extra ...string) {
+func (f *formatterTSJSONLines) formatProcEntry(w io.Writer, p []ProcInfo, description, message string, extra ...string) {
 	extra = append([]string{"timestamp_desc", description, "message", message}, extra...)
 	for _, x := range p {
 	   fmt.Println(x.name)
