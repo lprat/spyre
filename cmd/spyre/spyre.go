@@ -91,7 +91,7 @@ func main() {
 				log.Debugf("Skipping process spyre: %d.", proc)
 				continue
 			}
-			log.Debugf("Scanning process pid: %d...", proc)
+			log.Infof("Scanning process pid: %d...", proc)
 			if err := scanner.ScanProc(proc); err != nil {
 				log.Errorf("Error scanning pid -> %d: %v", proc, err)
 			}
