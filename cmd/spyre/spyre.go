@@ -150,6 +150,7 @@ func main() {
 				return nil
 			}
 			if info.IsDir() {
+				log.Infof("Scan directory: %s", path)
 				if platform.SkipDir(fs, path) {
 					log.Noticef("Skipping %s", path)
 					return filepath.SkipDir
