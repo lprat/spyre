@@ -12189,7 +12189,7 @@ func (s *systemScanner) Scan() error {
 			if err != nil {
 				continue
 			}
-      admuser.append(admuser, asString2.ToString())
+      admuser = append(admuser, asString2.ToString())
     }
   }
 	//write user info
@@ -12216,11 +12216,11 @@ func (s *systemScanner) Scan() error {
 		}
     item := itemRaw.ToIDispatch()
     defer item.Release()
-    asString, err = oleutil.GetProperty(item, "HotFixID")
+    asString, err := oleutil.GetProperty(item, "HotFixID")
 		if err != nil {
 			continue
 		}
-    kb.append(kb, asString.ToString())
+    kb = append(kb, asString.ToString())
   }
 	message = fmt.Sprintf("Kb installed on %s",spyre.Hostname)
 	report.AddProcInfo("kb_installed", message,
