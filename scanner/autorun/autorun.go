@@ -21,9 +21,8 @@ import (
 	"github.com/spyre-project/spyre/log"
 	"github.com/spyre-project/spyre/report"
 	"github.com/spyre-project/spyre/scanner"
-	ole "github.com/go-ole/go-ole"
-  //ole2 "github.com/mattn/go-ole"
-  "github.com/mattn/go-ole/oleutil"
+	 ole "github.com/go-ole/go-ole"
+	"github.com/go-ole/go-ole/oleutil"
 
 )
 
