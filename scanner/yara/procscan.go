@@ -130,6 +130,11 @@ func (s *procScanner) ScanProc(pid int32) error {
 		  }
 	  }
   }
+	if ppid == strconv.FormatInt(int64(pid), 10) {
+		ppid = ""
+	} else if ppid == "0" {
+	  ppid = ""
+	}
 	for _, v := range []struct {
 		name  string
 		value interface{}
