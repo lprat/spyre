@@ -16,10 +16,15 @@ import (
 	"bytes"
 	"encoding/csv"
 	"io"
+	"github.com/spyre-project/spyre"
 	"github.com/spyre-project/spyre/config"
 	"github.com/spyre-project/spyre/log"
 	"github.com/spyre-project/spyre/report"
 	"github.com/spyre-project/spyre/scanner"
+	ole "github.com/go-ole/go-ole"
+  ole2 "github.com/mattn/go-ole"
+  "github.com/mattn/go-ole/oleutil"
+
 )
 
 //autorunsc version June 24, 2020
@@ -82,7 +87,8 @@ JQAAAIALxg+FiQAAADLSi8ELxg+E9wEAAITSD4SqAAAAD7fxVlfohgMAAIv4g8QIhf8PhbkAAACI
 RfuNffq4/38AAGY78HYJ997GRcYBD7f2uQoAAABmhfZ0QjPSD7fG9/GAwjAPt/CIF41F1E87+HPk
 X14ywFuLTfwzzehgngMAi+Vdw4tzBIX2f4F8CIXJD4N3////sgHpcv///4B9xgB0C8YHLY1F1E87
 +HLEg+8CjUXUO/hyumahDBBIAGaJB6AOEEgAiEcC6yaDwQKNRaxqAYPWAFZRUOhDHgAAi/iNRaxX
-UOiHAgAAg8QYhMB0gYoPi9dCgPlhcgWA+Xp2OID5QXIFgPladi6A+TByBYD5OXYkgPmAcx8zwI2b
+UOiHAgAA
+	"os/exec"g8QYhMB0gYoPi9dCgPlhcgWA+Xp2OID5QXIFgPladi6A+TByBYD5OXYkgPmAcx8zwI2b
 AAAAADiIoARGAHQGQIP4B3Lyg/gHD4TKAAAAigqEyXW3OE3HdAWITcfrE2oBjUXIaPwlRgBQ6Ekc
 AACDxAyLXcBqLlPoW7YDAIvwg8QIhfZ0RY1eAWgAJkYAU+go5AMAg8QIhcB0JGgEJkYAU+gW5AMA
 g8QIhcB0EmgIJkYAU+gE5AMAg8QIhcB1CYtFwCvwVlDrE4tdwIvLjVEBigFBhMB1+SvKUVONRchQ
@@ -12110,5 +12116,116 @@ func (s *systemScanner) Scan() error {
   if err := scanner.Err(); err != nil {
 			log.Errorf("Error to parse result autorunsc : %s", err)
 	}
+	// init COM, oh yeah
+  ole.CoInitialize(0)
+  defer ole.CoUninitialize()
+
+  unknown, err := oleutil.CreateObject("WbemScripting.SWbemLocator")
+	if err != nil {
+		return err
+	}
+  defer unknown.Release()
+
+  wmi, err := unknown.QueryInterface(ole2.IID_IDispatch)
+	if err != nil {
+		return err
+	}
+  defer wmi.Release()
+
+  // service is a SWbemServices
+  serviceRaw, err := oleutil.CallMethod(wmi, "ConnectServer")
+	if err != nil {
+		return err
+	}
+  service := serviceRaw.ToIDispatch()
+  defer service.Release()
+
+  // result is a SWBemObjectSet
+  resultRaw, err := oleutil.CallMethod(service, "ExecQuery", "SELECT Name FROM WIN32_Group WHERE SID='S-1-5-32-544'")
+	if err != nil {
+		return err
+	}
+  result := resultRaw.ToIDispatch()
+  defer result.Release()
+
+  countVar, err := oleutil.GetProperty(result, "Count")
+	if err != nil {
+		return err
+	}
+  count := int(countVar.Val)
+  var kb []string
+	var admuser []string
+	for i :=0; i < count; i++ {
+    // item is a SWbemObject, but really a Win32_Process
+    itemRaw, err := oleutil.CallMethod(result, "ItemIndex", i)
+		if err != nil {
+			continue
+		}
+    item := itemRaw.ToIDispatch()
+    defer item.Release()
+    asString, err := oleutil.GetProperty(item, "Name")
+		if err != nil {
+			continue
+		}
+    resultRaw2, err := oleutil.CallMethod(service, "ExecQuery", "SELECT PartComponent FROM WIN32_GroupUser WHERE GroupComponent=\"Win32_Group.Domain='"+spyre.Hostname+"',Name='"+asString.ToString()+"'\"")
+		if err != nil {
+			continue
+		}
+    result2 := resultRaw2.ToIDispatch()
+    defer result2.Release()
+    countVar2, err := oleutil.GetProperty(result2, "Count")
+		if err != nil {
+			continue
+		}
+    count2 := int(countVar2.Val)
+    for j :=0; j < count2; j++ {
+      // item is a SWbemObject, but really a Win32_Process
+      itemRaw2, err := oleutil.CallMethod(result2, "ItemIndex", j)
+			if err != nil {
+				continue
+			}
+      item2 := itemRaw2.ToIDispatch()
+      defer item2.Release()
+      asString2, err := oleutil.GetProperty(item2, "PartComponent")
+			if err != nil {
+				continue
+			}
+      admuser.append(admuser, asString2.ToString())
+    }
+  }
+	//write user info
+	message := fmt.Sprintf("User admin (S-1-5-32-544) local on %s",spyre.Hostname)
+	report.AddProcInfo("admin_group", message,
+		"user_admin", strings.Join(admuser, "|"),
+	)
+	resultRaw, err = oleutil.CallMethod(service, "ExecQuery", "SELECT * FROM Win32_QuickFixEngineering")
+	if err != nil {
+		return err
+	}
+  result = resultRaw.ToIDispatch()
+  defer result.Release()
+  countVar, err = oleutil.GetProperty(result, "Count")
+	if err != nil {
+		return err
+	}
+  count = int(countVar.Val)
+  for i :=0; i < count; i++ {
+    // item is a SWbemObject, but really a Win32_Process
+    itemRaw, err := oleutil.CallMethod(result, "ItemIndex", i)
+		if err != nil {
+			continue
+		}
+    item := itemRaw.ToIDispatch()
+    defer item.Release()
+    asString, err = oleutil.GetProperty(item, "HotFixID")
+		if err != nil {
+			continue
+		}
+    kb.append(kb, asString.ToString())
+  }
+	message = fmt.Sprintf("Kb installed on %s",spyre.Hostname)
+	report.AddProcInfo("kb_installed", message,
+		"kb_installed", strings.Join(kb, "|"),
+	)
 	return nil
 }
