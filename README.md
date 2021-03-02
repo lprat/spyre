@@ -10,6 +10,8 @@
  - event windows scan by yara rules
  - netstat scan ioc
  - autorun scan ioc (from autorunsc sysinternals for windows only)
+ - get KB installed (only windows)
+ - get user is member of admin local (windows only)
  - change order of scan (ioc->mem->evtx->fs)
  - jsonl result by default
 
@@ -238,7 +240,7 @@ You can use variables informations passed to yara:
   - cusername: username who runned children process - separed by "|" (String)
 
 You can kill processus matched by yara rule if you rename rule with prefix "kill_", e.g.: kill_emotet {} .
-  
+
 ### YARA Evtx
 E.G:
 ```
