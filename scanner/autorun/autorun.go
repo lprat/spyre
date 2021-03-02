@@ -22,7 +22,7 @@ import (
 	"github.com/spyre-project/spyre/report"
 	"github.com/spyre-project/spyre/scanner"
 	ole "github.com/go-ole/go-ole"
-  ole2 "github.com/mattn/go-ole"
+  //ole2 "github.com/mattn/go-ole"
   "github.com/mattn/go-ole/oleutil"
 
 )
@@ -12126,7 +12126,7 @@ func (s *systemScanner) Scan() error {
 	}
   defer unknown.Release()
 
-  wmi, err := unknown.QueryInterface(ole2.IID_IDispatch)
+  wmi, err := unknown.QueryInterface(ole.IID_IDispatch)
 	if err != nil {
 		return err
 	}
