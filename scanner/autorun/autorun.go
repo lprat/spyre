@@ -12226,11 +12226,11 @@ func (s *systemScanner) Scan() error {
 	curbuild := ""
 	keyx, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
   if err == nil {
-		pn , _, err2 := k.GetStringValue("ProductName")
+		pn , _, err2 := keyx.GetStringValue("ProductName")
     if err2 == nil {
 		  osver = fmt.Sprintf("%s\n", pn)
     }
-		cb, _, err2 := k.GetStringValue("CurrentBuild")
+		cb, _, err2 := keyx.GetStringValue("CurrentBuild")
     if err2 != nil {
         curbuild = fmt.Sprintf("%s\n", cb)
     }
