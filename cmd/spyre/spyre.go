@@ -142,7 +142,7 @@ func main() {
   f, err := os.Open(config.IgnorePath)
 	var tmpdata []byte
 	if err == nil {
-	    tmpdata, _ := ioutil.ReadAll(f)
+	    tmpdata, _ = ioutil.ReadAll(f)
   }
 	f.Close()
 	IgnorePathValue := strings.Split(string(tmpdata), "\n")
