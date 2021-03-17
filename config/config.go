@@ -16,6 +16,7 @@ import (
 var (
 	Paths              simpleStringSlice
 	EvtxPaths          simpleStringSlice
+	procscan           bool = false
 	MaxFileSize        = fileSize(32 * 1024 * 1024)
 	ReportTargets      = simpleStringSlice([]string{"spyre.jsonl"})
 	Hostname           string

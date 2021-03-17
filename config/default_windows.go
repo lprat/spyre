@@ -12,7 +12,6 @@ import (
 	"golang.org/x/sys/windows/registry"
 )
 
-var procscan bool = false
 var defaultPaths []string
 var defaultEvtxPaths = []string{os.Getenv("SYSTEMROOT") + "\\system32\\winevt\\Logs\\"}
 
