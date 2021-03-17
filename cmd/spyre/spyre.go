@@ -82,7 +82,7 @@ func main() {
 	}
 
 	// process scan first
-	if procscan {
+	if config.BProcScan {
 	  procs, err := process.Pids()
 	  if err != nil {
 		  log.Errorf("Error while enumerating processes: %v", err)

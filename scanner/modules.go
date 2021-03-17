@@ -88,7 +88,7 @@ func InitModules() error {
 			log.Infof("Error initializing %s module: %v", s.Name(), err)
 			continue
 		}
-		config.procscan = true
+		config.BProcScan = true
 		ps = append(ps, s)
 	}
 	procScanners = ps
