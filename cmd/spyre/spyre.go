@@ -82,21 +82,23 @@ func main() {
 	}
 
 	// process scan first
-	procs, err := process.Pids()
-	if err != nil {
-		log.Errorf("Error while enumerating processes: %v", err)
-	} else {
-		for _, proc := range procs {
-			if int(proc) == ourpid {
-				log.Debugf("Skipping process spyre: %d.", proc)
-				continue
-			}
-			log.Infof("Scanning process pid: %d...", proc)
-			if err := scanner.ScanProc(proc); err != nil {
-				log.Errorf("Error scanning pid -> %d: %v", proc, err)
-			}
-		}
-	}
+	if procscan {
+	  procs, err := process.Pids()
+	  if err != nil {
+		  log.Errorf("Error while enumerating processes: %v", err)
+	  } else {
+		  for _, proc := range procs {
+			  if int(proc) == ourpid {
+				  log.Debugf("Skipping process spyre: %d.", proc)
+			  	continue
+		  	}
+	  		log.Infof("Scanning process pid: %d...", proc)
+  			if err := scanner.ScanProc(proc); err != nil {
+				  log.Errorf("Error scanning pid -> %d: %v", proc, err)
+			  }
+		  }
+	  }
+  }
 
 	fse := afero.NewOsFs()
 	for _, path := range config.EvtxPaths {

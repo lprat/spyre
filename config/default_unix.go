@@ -2,6 +2,7 @@
 
 package config
 
+var procscan bool
 var defaultPaths = []string{"/"}
 var defaultEvtxPaths = []string{"/var/log/"}
 
