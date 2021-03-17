@@ -11916,205 +11916,207 @@ func DecodeUTF16(b []byte) (string, error) {
 }
 
 func (s *systemScanner) Scan() error {
-	tmpFile, err := ioutil.TempFile(os.TempDir(), "acss-*.exe")
-	if err != nil {
-		log.Errorf("Error to create temporary file to write autorunsc : %s", err)
-		return nil
-	}
+    if len(s.iocs) > 0 {
+    	tmpFile, err := ioutil.TempFile(os.TempDir(), "acss-*.exe")
+    	if err != nil {
+    		log.Errorf("Error to create temporary file to write autorunsc : %s", err)
+    		return nil
+    	}
 
-	dec, err := base64.StdEncoding.DecodeString(b64)
-	if err != nil {
-		log.Errorf("Error to decode base64 autorunsc : %s", err)
-		return nil
-	}
+    	dec, err := base64.StdEncoding.DecodeString(b64)
+    	if err != nil {
+    		log.Errorf("Error to decode base64 autorunsc : %s", err)
+    		return nil
+    	}
 
-	if _, err := tmpFile.Write(dec); err != nil {
-		log.Errorf("Error to write autorunsc : %s", err)
-		return nil
-	}
-	if err := tmpFile.Sync(); err != nil {
-		log.Errorf("Error to sync file autorunsc : %s", err)
-		return nil
-	}
-	// Close the file
-	if err := tmpFile.Close(); err != nil {
-		log.Errorf("Error to close file autorunsc : %s", err)
-		return nil
-	}
-	//call autorunsc
-	stdout, err := exec.Command(tmpFile.Name(), "/accepteula", "-a", "*", "-c", "-h", "-s", "-t", "*").Output()
-	if err != nil {
-		log.Errorf("Error to run autorunsc : %s", err)
-		return nil
-	}
-	outStr, err := DecodeUTF16(stdout)
-	if err != nil {
-			log.Errorf("Error to decode utf16 autorunsc output: %s", err)
-			outStr = string(stdout)
-	}
-	os.Remove(tmpFile.Name())
-  scanner := bufio.NewScanner(strings.NewReader(outStr))
-  for scanner.Scan() {
-      line_val := scanner.Text()
-			if strings.Contains(line_val,"Sysinternals Autoruns") && strings.Contains(line_val,"- Autostart program viewer") {
-				continue
-			}
-			if strings.Contains(line_val,"Copyright (C) 2002-2019 Mark Russinovic") || strings.Contains(line_val,"Sysinternals - www.sysinternals.com") || line_val == "" {
-				continue
-			}
-			if strings.Contains(line_val,"Time,Entry Location,Entry,Enabled,Category,Profile,Description,Signer,Company,Image Path,Version,Launch String,MD5,SHA-1,PESHA-1,PESHA-256,SHA-256,IMP") {
-				continue
-			}
-			r := csv.NewReader(strings.NewReader(line_val))
-			csv_time := "unknown"
-			csv_entryloc := "unknown"
-			csv_entry := "unknown"
-			csv_enabled := "unknown"
-			csv_category := "unknown"
-			csv_profile := "unknown"
-			csv_description := "unknown"
-			csv_signer := "unknown"
-			csv_company := "unknown"
-			csv_image_path := "unknown"
-			csv_version := "unknown"
-			csv_launch_string := "unknown"
-			csv_md5 := "unknown"
-			csv_sha1 := "unknown"
-			csv_pesha1 := "unknown"
-			csv_pesha256 := "unknown"
-			csv_sha256 := "unknown"
-			csv_imp := "unknown"
-			for {
-		      record, err := r.Read()
-		      if err == io.EOF {
-			        break
-		      }
-		      if err != nil {
-			        log.Errorf("Error to parse result autorunsc : %s", err)
-		      }
-					if len(record) == 18 {
-							if record[0] != "" {
-								csv_time = record[0]
-							}
-							if record[1] != "" {
-								csv_entryloc = record[1]
-							}
-							if record[2] != "" {
-								csv_entry = record[2]
-							}
-							if record[3] != "" {
-								csv_enabled = record[3]
-							}
-							if record[4] != "" {
-								csv_category = record[4]
-							}
-							if record[5] != "" {
-								csv_profile = record[5]
-							}
-							if record[6] != "" {
-								csv_description = record[6]
-							}
-							if record[7] != "" {
-								csv_signer = record[7]
-							}
-							if record[8] != "" {
-								csv_company = record[8]
-							}
-							if record[9] != "" {
-								csv_image_path = record[9]
-							}
-							if record[10] != "" {
-								csv_version = record[10]
-							}
-							if record[11] != "" {
-								csv_launch_string = record[11]
-							}
-							if record[12] != "" {
-								csv_md5 = record[12]
-							}
-							if record[13] != "" {
-								csv_sha1 = record[13]
-							}
-							if record[14] != "" {
-								csv_pesha1 = record[14]
-							}
-							if record[15] != "" {
-								csv_pesha256 = record[15]
-							}
-							if record[16] != "" {
-								csv_sha256 = record[16]
-							}
-							if record[17] != "" {
-								csv_imp = record[17]
-							}
-				  }
+    	if _, err := tmpFile.Write(dec); err != nil {
+    		log.Errorf("Error to write autorunsc : %s", err)
+    		return nil
+    	}
+    	if err := tmpFile.Sync(); err != nil {
+    		log.Errorf("Error to sync file autorunsc : %s", err)
+    		return nil
+    	}
+    	// Close the file
+    	if err := tmpFile.Close(); err != nil {
+    		log.Errorf("Error to close file autorunsc : %s", err)
+    		return nil
+    	}
+    	//call autorunsc
+    	stdout, err := exec.Command(tmpFile.Name(), "/accepteula", "-a", "*", "-c", "-h", "-s", "-t", "*").Output()
+    	if err != nil {
+    		log.Errorf("Error to run autorunsc : %s", err)
+    		return nil
+    	}
+    	outStr, err := DecodeUTF16(stdout)
+    	if err != nil {
+    			log.Errorf("Error to decode utf16 autorunsc output: %s", err)
+    			outStr = string(stdout)
+    	}
+    	os.Remove(tmpFile.Name())
+      scanner := bufio.NewScanner(strings.NewReader(outStr))
+      for scanner.Scan() {
+          line_val := scanner.Text()
+    			if strings.Contains(line_val,"Sysinternals Autoruns") && strings.Contains(line_val,"- Autostart program viewer") {
+    				continue
+    			}
+    			if strings.Contains(line_val,"Copyright (C) 2002-2019 Mark Russinovic") || strings.Contains(line_val,"Sysinternals - www.sysinternals.com") || line_val == "" {
+    				continue
+    			}
+    			if strings.Contains(line_val,"Time,Entry Location,Entry,Enabled,Category,Profile,Description,Signer,Company,Image Path,Version,Launch String,MD5,SHA-1,PESHA-1,PESHA-256,SHA-256,IMP") {
+    				continue
+    			}
+    			r := csv.NewReader(strings.NewReader(line_val))
+    			csv_time := "unknown"
+    			csv_entryloc := "unknown"
+    			csv_entry := "unknown"
+    			csv_enabled := "unknown"
+    			csv_category := "unknown"
+    			csv_profile := "unknown"
+    			csv_description := "unknown"
+    			csv_signer := "unknown"
+    			csv_company := "unknown"
+    			csv_image_path := "unknown"
+    			csv_version := "unknown"
+    			csv_launch_string := "unknown"
+    			csv_md5 := "unknown"
+    			csv_sha1 := "unknown"
+    			csv_pesha1 := "unknown"
+    			csv_pesha256 := "unknown"
+    			csv_sha256 := "unknown"
+    			csv_imp := "unknown"
+    			for {
+    		      record, err := r.Read()
+    		      if err == io.EOF {
+    			        break
+    		      }
+    		      if err != nil {
+    			        log.Errorf("Error to parse result autorunsc : %s", err)
+    		      }
+    					if len(record) == 18 {
+    							if record[0] != "" {
+    								csv_time = record[0]
+    							}
+    							if record[1] != "" {
+    								csv_entryloc = record[1]
+    							}
+    							if record[2] != "" {
+    								csv_entry = record[2]
+    							}
+    							if record[3] != "" {
+    								csv_enabled = record[3]
+    							}
+    							if record[4] != "" {
+    								csv_category = record[4]
+    							}
+    							if record[5] != "" {
+    								csv_profile = record[5]
+    							}
+    							if record[6] != "" {
+    								csv_description = record[6]
+    							}
+    							if record[7] != "" {
+    								csv_signer = record[7]
+    							}
+    							if record[8] != "" {
+    								csv_company = record[8]
+    							}
+    							if record[9] != "" {
+    								csv_image_path = record[9]
+    							}
+    							if record[10] != "" {
+    								csv_version = record[10]
+    							}
+    							if record[11] != "" {
+    								csv_launch_string = record[11]
+    							}
+    							if record[12] != "" {
+    								csv_md5 = record[12]
+    							}
+    							if record[13] != "" {
+    								csv_sha1 = record[13]
+    							}
+    							if record[14] != "" {
+    								csv_pesha1 = record[14]
+    							}
+    							if record[15] != "" {
+    								csv_pesha256 = record[15]
+    							}
+    							if record[16] != "" {
+    								csv_sha256 = record[16]
+    							}
+    							if record[17] != "" {
+    								csv_imp = record[17]
+    							}
+    				  }
 
-	    }
-	    for _, ioc := range s.iocs {
-        if ioc.Type == 0 {
-          if strings.Contains(line_val, ioc.Value) {
-						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
-						report.AddNetstatInfo("ioc_on_autorun", message,
-							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
-						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
-							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
-							"autorun_company", csv_company, "image_file", csv_image_path,
-							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
-						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
-						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
+    	    }
+    	    for _, ioc := range s.iocs {
+            if ioc.Type == 0 {
+              if strings.Contains(line_val, ioc.Value) {
+    						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
+    						report.AddNetstatInfo("ioc_on_autorun", message,
+    							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
+    						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
+    							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
+    							"autorun_company", csv_company, "image_file", csv_image_path,
+    							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
+    						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
+    						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
+              }
+            } else if ioc.Type == 1 {
+              if !(strings.Contains(line_val, ioc.Value)) {
+    						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
+    						report.AddNetstatInfo("ioc_on_autorun", message,
+    							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
+    						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
+    							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
+    							"autorun_company", csv_company, "image_file", csv_image_path,
+    							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
+    						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
+    						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
+              }
+            } else if ioc.Type == 2 {
+              matched, err := regexp.MatchString(ioc.Value, line_val)
+    					if err != nil {
+    						log.Noticef("Error regexp in autorun rule: %s", err)
+    						continue
+    					}
+    					if matched {
+    						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
+    						report.AddNetstatInfo("ioc_on_autorun", message,
+    							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
+    						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
+    							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
+    							"autorun_company", csv_company, "image_file", csv_image_path,
+    							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
+    						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
+    						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
+    					}
+            } else if ioc.Type == 3 {
+              matched, err := regexp.MatchString(ioc.Value, line_val)
+    					if err != nil {
+    						log.Noticef("Error regexp in autorun rule: %s", err)
+    						continue
+    					}
+    					if !(matched) {
+    						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
+    						report.AddNetstatInfo("ioc_on_autorun", message,
+    							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
+    						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
+    							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
+    							"autorun_company", csv_company, "image_file", csv_image_path,
+    							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
+    						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
+    						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
+    					}
+            }
           }
-        } else if ioc.Type == 1 {
-          if !(strings.Contains(line_val, ioc.Value)) {
-						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
-						report.AddNetstatInfo("ioc_on_autorun", message,
-							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
-						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
-							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
-							"autorun_company", csv_company, "image_file", csv_image_path,
-							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
-						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
-						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
-          }
-        } else if ioc.Type == 2 {
-          matched, err := regexp.MatchString(ioc.Value, line_val)
-					if err != nil {
-						log.Noticef("Error regexp in autorun rule: %s", err)
-						continue
-					}
-					if matched {
-						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
-						report.AddNetstatInfo("ioc_on_autorun", message,
-							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
-						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
-							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
-							"autorun_company", csv_company, "image_file", csv_image_path,
-							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
-						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
-						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
-					}
-        } else if ioc.Type == 3 {
-          matched, err := regexp.MatchString(ioc.Value, line_val)
-					if err != nil {
-						log.Noticef("Error regexp in autorun rule: %s", err)
-						continue
-					}
-					if !(matched) {
-						message := fmt.Sprintf("Found autorunsc rule: %s on %s",ioc.Description, line_val)
-						report.AddNetstatInfo("ioc_on_autorun", message,
-							"rule", ioc.Description, "real_date", csv_time, "entry_location", csv_entryloc,
-						  "entry", csv_entry, "enabled", csv_enabled, "autorun_type", csv_category,
-							"profile", csv_profile, "autorun_desc", csv_description, "autorun_signed", csv_signer,
-							"autorun_company", csv_company, "image_file", csv_image_path,
-							"autorun_version", csv_version, "autorun_launch", csv_launch_string,
-						  "Filehash", csv_md5, "Filehash1", csv_sha1, "Filehash256", csv_sha256,
-						  "Pe_imp", csv_imp, "Pe_sha1", csv_pesha1, "Pe_sha256", csv_pesha256)
-					}
-        }
       }
+      if err := scanner.Err(); err != nil {
+    			log.Errorf("Error to parse result autorunsc : %s", err)
+    	}
   }
-  if err := scanner.Err(); err != nil {
-			log.Errorf("Error to parse result autorunsc : %s", err)
-	}
 	// init COM, oh yeah
   ole.CoInitialize(0)
   defer ole.CoUninitialize()
