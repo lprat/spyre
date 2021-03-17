@@ -139,7 +139,7 @@ func main() {
 		})
 	}
 
-  f, err := os.Open(config.IgnorePath)
+  f, _ := os.Open(config.IgnorePath)
 	tmpdata, err := ioutil.ReadAll(f)
 	f.Close()
 	IgnorePathValue := strings.Split(string(tmpdata), "\n")
