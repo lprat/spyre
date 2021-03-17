@@ -139,8 +139,11 @@ func main() {
 		})
 	}
 
-  f, _ := os.Open(config.IgnorePath)
-	tmpdata, err := ioutil.ReadAll(f)
+  f, err := os.Open(config.IgnorePath)
+	var tmpdata []byte
+	if err == nil {
+	    tmpdata, _ := ioutil.ReadAll(f)
+  }
 	f.Close()
 	IgnorePathValue := strings.Split(string(tmpdata), "\n")
 	fs := afero.NewOsFs()
