@@ -12223,11 +12223,16 @@ func (s *systemScanner) Scan() error {
     kb = append(kb, asString.ToString())
   }
 	osver := ""
+	curbuild := ""
 	keyx, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
   if err == nil {
 		pn , _, err2 := k.GetStringValue("ProductName")
-    if err == nil {
+    if err2 == nil {
 		  osver = fmt.Sprintf("%s\n", pn)
+    }
+		cb, _, err2 := k.GetStringValue("CurrentBuild")
+    if err2 != nil {
+        curbuild = fmt.Sprintf("%s\n", cb)
     }
   }
   defer keyx.Close()
@@ -12235,6 +12240,7 @@ func (s *systemScanner) Scan() error {
 	report.AddProcInfo("kb_installed", message,
 		"kb_installed", strings.Join(kb, "|"),
 		"windows_version", osver,
+		"windows_build", curbuild,
 	)
 	conn, err := net.Dial("udp", "8.8.8.8:53")
   if err == nil {
