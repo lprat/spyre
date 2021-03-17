@@ -24,7 +24,7 @@ import (
 	"github.com/spyre-project/spyre/scanner"
 	 ole "github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"
-
+  "golang.org/x/sys/windows/registry"
 )
 
 //autorunsc version June 24, 2020
@@ -12222,9 +12222,19 @@ func (s *systemScanner) Scan() error {
 		}
     kb = append(kb, asString.ToString())
   }
+	osver := ""
+	keyx, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows NT\CurrentVersion`, registry.QUERY_VALUE)
+  if err == nil {
+		pn , _, err2 := k.GetStringValue("ProductName")
+    if err == nil {
+		  osver = fmt.Sprintf("%s\n", pn)
+    }
+  }
+  defer keyx.Close()
 	message = fmt.Sprintf("Kb installed on %s",spyre.Hostname)
 	report.AddProcInfo("kb_installed", message,
 		"kb_installed", strings.Join(kb, "|"),
+		"windows_version", osver,
 	)
 	conn, err := net.Dial("udp", "8.8.8.8:53")
   if err == nil {
