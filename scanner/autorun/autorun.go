@@ -16,6 +16,7 @@ import (
 	"bytes"
 	"encoding/csv"
 	"io"
+	"net"
 	"github.com/spyre-project/spyre"
 	"github.com/spyre-project/spyre/config"
 	"github.com/spyre-project/spyre/log"
@@ -12225,5 +12226,15 @@ func (s *systemScanner) Scan() error {
 	report.AddProcInfo("kb_installed", message,
 		"kb_installed", strings.Join(kb, "|"),
 	)
+	conn, err := net.Dial("udp", "8.8.8.8:53")
+  if err == nil {
+        localAddr := conn.LocalAddr().(*net.UDPAddr)
+				localAddr.IP.String()
+				message = fmt.Sprintf("Local IP addr of %s : %s",spyre.Hostname,localAddr.IP.String())
+				report.AddProcInfo("local_ip", message,
+					"local_ip", localAddr.IP.String(),
+				)
+  }
+  defer conn.Close()
 	return nil
 }
