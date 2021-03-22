@@ -64,12 +64,12 @@ func (s *procScanner) ScanProc(pid int32) error {
   if err == nil {
     ppid = strconv.FormatInt(int64(ppidx), 10)
 	}
-	phandle, err := handle.Parent()
 	pcmdline := ""
 	pexe := ""
 	ppathexe := ""
 	pusername := ""
-	if err != nil {
+	phandle, err := handle.Parent()
+	if (err == nil)  {
 		pcmdline, err = phandle.Cmdline()
 	  if err != nil {
 	    pcmdline = ""
