@@ -65,21 +65,27 @@ func (s *procScanner) ScanProc(pid int32) error {
     ppid = strconv.FormatInt(int64(ppidx), 10)
 	}
 	phandle, err := handle.Parent()
-	pcmdline, err := phandle.Cmdline()
-  if err != nil {
-    pcmdline = ""
-  }
-	pexe, err := phandle.Name()
-  if err != nil {
-    pexe = ""
-  }
-	ppathexe, err := phandle.Exe()
-  if err != nil {
-    ppathexe = ""
-  }
-	pusername, err := phandle.Username()
-  if err != nil {
-    pusername = ""
+	pcmdline := ""
+	pexe := ""
+	ppathexe := ""
+	pusername := ""
+	if err != nil {
+		pcmdline, err2 := phandle.Cmdline()
+	  if err2 != nil {
+	    pcmdline = ""
+	  }
+		pexe, err2 := phandle.Name()
+	  if err2 != nil {
+	    pexe = ""
+	  }
+		ppathexe, err2 := phandle.Exe()
+	  if err2 != nil {
+	    ppathexe = ""
+	  }
+		pusername, err2 := phandle.Username()
+	  if err2 != nil {
+	    pusername = ""
+	  }
   }
 	cmdline, err := handle.Cmdline()
   if err != nil {
