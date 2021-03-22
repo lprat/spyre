@@ -70,20 +70,20 @@ func (s *procScanner) ScanProc(pid int32) error {
 	ppathexe := ""
 	pusername := ""
 	if err != nil {
-		pcmdline, err2 := phandle.Cmdline()
-	  if err2 != nil {
+		pcmdline, err = phandle.Cmdline()
+	  if err != nil {
 	    pcmdline = ""
 	  }
-		pexe, err2 := phandle.Name()
-	  if err2 != nil {
+		pexe, err = phandle.Name()
+	  if err != nil {
 	    pexe = ""
 	  }
-		ppathexe, err2 := phandle.Exe()
-	  if err2 != nil {
+		ppathexe, err = phandle.Exe()
+	  if err != nil {
 	    ppathexe = ""
 	  }
-		pusername, err2 := phandle.Username()
-	  if err2 != nil {
+		pusername, err = phandle.Username()
+	  if err != nil {
 	    pusername = ""
 	  }
   }
