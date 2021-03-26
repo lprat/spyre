@@ -10,6 +10,7 @@
  - event windows scan by yara rules
  - netstat scan ioc
  - autorun scan ioc (from autorunsc sysinternals for windows only)
+ - get return of command
  - get KB installed (only windows)
  - get user is member of admin local (windows only)
  - change order of scan (ioc->mem->evtx->fs)
@@ -222,6 +223,14 @@ Running `make release` creates a ZIP file that contains those binaries
 for all supported architectures.
 
 ## Write rules
+### File rules
+You can use variable informations passed to yara:
+  - filename: name of file
+  - filepath: full path
+  - extension: file extension
+
+If rule name contains "_keepfile" then the content of file added to report in base64.  
+
 ### Process rule
 You can use variables informations passed to yara:
   - pid: pid number (String)
@@ -274,6 +283,13 @@ rule windows_defender {
 E.G:
 ```
 {
+  "command":
+  [
+    {
+      "command": ["c:\windows\System32\ipconfig.exe", "/displaydns"],
+      "description":"cache DNS"
+    }
+  ],
   "autorun":
   [
     {

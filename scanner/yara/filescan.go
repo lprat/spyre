@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"strings"
+  "encoding/base64"
 
 	yr "github.com/lprat/go-yara/v4"
 	"github.com/spf13/afero"
@@ -62,6 +63,7 @@ func (s *fileScanner) ScanFile(f afero.File) error {
 	*/
 	fi, err := f.Stat()
 	var datem = ""
+	var content_file = ""
 	if err == nil {
 		date_tmp := fi.ModTime()
 		datem = date_tmp.String()
@@ -73,6 +75,7 @@ func (s *fileScanner) ScanFile(f afero.File) error {
 			var buf []byte
 			if buf, err = ioutil.ReadAll(f); err == nil {
 				md5sum = fmt.Sprintf("%x", md5.Sum(buf))
+				content_file = base64.StdEncoding.EncodeToString(buf)
 			}
 		}
 	} else {
@@ -85,6 +88,7 @@ func (s *fileScanner) ScanFile(f afero.File) error {
 		err = s.rules.ScanMem(buf, 0, 1*time.Minute, &matches)
 		if matches != nil {
 			md5sum = fmt.Sprintf("%x", md5.Sum(buf))
+			content_file = base64.StdEncoding.EncodeToString(buf)
 		}
 	}
 	for _, m := range matches {
@@ -96,8 +100,13 @@ func (s *fileScanner) ScanFile(f afero.File) error {
 		}
 		matched := strings.Join(matchx[:], " | ")
     message := m.Rule + " (yara) matched on file: " + f.Name() + " (" + string(md5sum) + ")"
-		report.AddFileInfo(f, "yara_on_file", message,
-			"rule", m.Rule, "Filehash", string(md5sum), "real_date", datem, "Filepath", f.Name(), "string_match", string(matched))
+		if strings.Contains(m.Rule,"_keepfile") {
+		  report.AddFileInfo(f, "yara_on_file", message,
+			  "rule", m.Rule, "Filehash", string(md5sum), "real_date", datem, "Filepath", f.Name(), "string_match", string(matched), "extracted_file", content_file)
+	  } else {
+			report.AddFileInfo(f, "yara_on_file", message,
+				"rule", m.Rule, "Filehash", string(md5sum), "real_date", datem, "Filepath", f.Name(), "string_match", string(matched))
+		}
 	}
 	return err
 }
