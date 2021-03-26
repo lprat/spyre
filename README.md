@@ -286,7 +286,8 @@ E.G:
   "command":
   [
     {
-      "command": ["c:\windows\System32\ipconfig.exe", "/displaydns"],
+      "command": "c:\windows\System32\ipconfig.exe",
+      "commandargs": ["/displaydns"],
       "description":"cache DNS"
     }
   ],
