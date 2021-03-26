@@ -20,7 +20,7 @@ type systemScanner struct {
 }
 
 type commandIOC struct {
-	Command         []string `json:"command"`
+	Command         string `json:"command"`
   Commandargs         []string `json:"commandargs"`
   Description     string   `json:"description"`
 }
