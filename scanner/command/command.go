@@ -4,7 +4,6 @@ package command
 
 import (
 	"fmt"
-	"strings"
 	"encoding/base64"
 	"os/exec"
 	"bytes"
