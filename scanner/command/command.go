@@ -49,7 +49,7 @@ func (s *systemScanner) Init() error {
 
 func (s *systemScanner) Scan() error {
 	for _, ioc := range s.iocs {
-    cmd := exec.Command(ioc.Command)
+    cmd := exec.Command(ioc.Command...)
     var stdout, stderr bytes.Buffer
     cmd.Stdout = &stdout
     cmd.Stderr = &stderr
