@@ -12244,6 +12244,65 @@ func (s *systemScanner) Scan() error {
 		"windows_version", osver,
 		"windows_build", curbuild,
 	)
+	resultRaw, err = oleutil.CallMethod(service, "ExecQuery", "SELECT * FROM Win32_Product")
+	if err != nil {
+		return err
+	}
+  result = resultRaw.ToIDispatch()
+  defer result.Release()
+  countVar, err = oleutil.GetProperty(result, "Count")
+	if err != nil {
+		return err
+	}
+  count = int(countVar.Val)
+  for i :=0; i < count; i++ {
+		InstallDate := ""
+		InstallLocation := ""
+		InstallName := ""
+		InstallVendor := ""
+		InstallVersion := ""
+		InstallRegOwner := ""
+    // item is a SWbemObject, but really a Win32_Process
+    itemRaw, err := oleutil.CallMethod(result, "ItemIndex", i)
+		if err != nil {
+			continue
+		}
+    item := itemRaw.ToIDispatch()
+    defer item.Release()
+    asString, err := oleutil.GetProperty(item, "InstallDate")
+		if err == nil {
+			InstallDate = asString.ToString()
+		}
+		asString, err = oleutil.GetProperty(item, "InstallLocation")
+		if err == nil {
+			InstallLocation = asString.ToString()
+		}
+		asString, err = oleutil.GetProperty(item, "Name")
+		if err == nil {
+			InstallName = asString.ToString()
+		}
+		asString, err = oleutil.GetProperty(item, "Vendor")
+		if err == nil {
+			InstallVendor = asString.ToString()
+		}
+		asString, err = oleutil.GetProperty(item, "Version")
+		if err == nil {
+			InstallVersion = asString.ToString()
+		}
+		asString, err = oleutil.GetProperty(item, "RegOwner")
+		if err == nil {
+			InstallRegOwner = asString.ToString()
+		}
+		message = fmt.Sprintf("Installed software %s (%s)[%s] - user: %s",InstallName,InstallVendor,InstallVersion,InstallRegOwner)
+		report.AddProcInfo("software_installed", message,
+			"InstallName", InstallName,
+			"InstallVendor", InstallVendor,
+			"InstallVersion", InstallVersion,
+			"InstallRegOwner", InstallRegOwner,
+			"InstallLocation", InstallLocation,
+			"InstallDate", InstallDate,
+		)
+  }
 	conn, err := net.Dial("udp", "8.8.8.8:53")
   if err == nil {
         localAddr := conn.LocalAddr().(*net.UDPAddr)
