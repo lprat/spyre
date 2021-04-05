@@ -12262,6 +12262,9 @@ func (s *systemScanner) Scan() error {
 		InstallVendor := ""
 		InstallVersion := ""
 		InstallRegOwner := ""
+		InstallSource := ""
+		PackageName := ""
+		LocalPackage := ""
     // item is a SWbemObject, but really a Win32_Process
     itemRaw, err := oleutil.CallMethod(result, "ItemIndex", i)
 		if err != nil {
@@ -12293,6 +12296,18 @@ func (s *systemScanner) Scan() error {
 		if err == nil {
 			InstallRegOwner = asString.ToString()
 		}
+		asString, err = oleutil.GetProperty(item, "InstallSource")
+		if err == nil {
+			InstallSource = asString.ToString()
+		}
+		asString, err = oleutil.GetProperty(item, "PackageName")
+		if err == nil {
+			PackageName = asString.ToString()
+		}
+		asString, err = oleutil.GetProperty(item, "LocalPackage")
+		if err == nil {
+			LocalPackage = asString.ToString()
+		}
 		message = fmt.Sprintf("Installed software %s (%s)[%s] - user: %s",InstallName,InstallVendor,InstallVersion,InstallRegOwner)
 		report.AddProcInfo("software_installed", message,
 			"InstallName", InstallName,
@@ -12301,6 +12316,9 @@ func (s *systemScanner) Scan() error {
 			"InstallRegOwner", InstallRegOwner,
 			"InstallLocation", InstallLocation,
 			"InstallDate", InstallDate,
+			"InstallSource", InstallSource,
+			"PackageName", PackageName,
+			"LocalPackage", LocalPackage,
 		)
   }
 	conn, err := net.Dial("udp", "8.8.8.8:53")
