@@ -13,6 +13,8 @@
  - get return of command
  - get KB installed (only windows)
  - get user is member of admin local (windows only)
+ - get local IP routed
+ - get installed software
  - change order of scan (ioc->mem->evtx->fs)
  - jsonl result by default
 
