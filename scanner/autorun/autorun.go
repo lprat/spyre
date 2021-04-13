@@ -19933,7 +19933,7 @@ func (s *systemScanner) Scan() error {
 			log.Errorf("Error to run logonsession : %s", err)
 			return nil
 		}
-		scanner_se := bufio.NewScanner(strings.NewReader(stdout_se))
+		scanner_se := bufio.NewScanner(strings.NewReader(string(stdout_se)))
 		for scanner_se.Scan() {
 				line_val := scanner_se.Text()
 				if strings.Contains(line_val,"Logon Session,User Name,Auth Package,Logon Type,Session,Sid,Logon Time,Logon Server,DNS Domain,UPN,Processes") {
