@@ -19997,7 +19997,7 @@ func (s *systemScanner) Scan() error {
             //
 						message := fmt.Sprintf("Logged session %s: user: %s [%s] by %s/%s",csv_session, csv_username, csv_sid, csv_auth_package, csv_auth_type)
 						report.AddNetstatInfo("loggon_session", message,
-              "real_date", csv_logon_time, "logon_session", csv_session,
+              "real_date", csv_logon_time, "logon_session_id", csv_session, "logon_session", csv_logon_session,
 							"username", csv_username, "user_sid", csv_sid, "auth_package", csv_auth_package,
 							"auth_type", csv_auth_type, "logon_server", csv_logon_server, "logon_dns", csv_dns_domain,
 							"logon_upn", csv_upn, "process_list", csv_process_list)
