@@ -10,6 +10,7 @@
  - event windows scan by yara rules
  - netstat scan ioc
  - autorun scan ioc (from autorunsc sysinternals for windows only)
+ - logonsession (get all session user)
  - get return of command
  - get KB installed (only windows)
  - get user is member of admin local (windows only)
