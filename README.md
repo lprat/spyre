@@ -361,9 +361,9 @@ You can use type search:
   - 1: Key + Name
   - 2: Key + Real name contains name
   - 3: Key + Name + Contains value
-  - 4: Key + Name + Contains value
+  - 4: Key + Name + Regex value
   - 5: Key + Contains value (check all names under key)
-  - 6: Key + Contains value (check all names under key)
+  - 6: Key + Regex value (check all names under key)
 
 #### Autorun rules
   You can use type search:
