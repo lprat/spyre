@@ -53,7 +53,7 @@ func (s *systemScanner) Init() error {
 
 func (s *systemScanner) Scan() error {
 	for _, ioc := range s.iocs {
-    state, receive := ScanPort(ioc.ip, ioc.port, ioc.protocol, ioc.timeout)
+    state, receive := ScanPort(ioc.ip, ioc.port, ioc.protocol, ioc.send, ioc.timeout)
     if state == 1 {
       message := fmt.Sprintf("Connected to: %s:%s [] -> Open",ioc.ip,ioc.port,ioc.protocol)
       report.AddProcInfo("connect", message,
@@ -73,14 +73,13 @@ func (s *systemScanner) Scan() error {
         "state", "error",
       )
     }
-    conn.Close()
 	}
 	return nil
 }
 
-func ScanPort(ip string, port string, protocol string, send string, timeout time.Duration) (state int, receive string) {
+func ScanPort(ip string, port string, protocol string, send string, timeout string) (state int, receive string) {
     target := fmt.Sprintf("%s:%s", ip, port)
-    timeout, err := getTimeout(ioc.protocol)
+    timeout, err := getTimeout(timeout)
     if err != nil {
 			timeout = time.Second * 2
 		}
