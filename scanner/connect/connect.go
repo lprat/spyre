@@ -18,13 +18,13 @@ type systemScanner struct {
 }
 
 type connectIOC struct {
-	ip         string `json:"ip"`
-  port         string `json:"port"`
-  protocol         string `json:"protocol"`
+	Ip         string `json:"ip"`
+  Port         string `json:"port"`
+  Protocol         string `json:"protocol"`
   // tcp or udp
-  timeout         string `json:"timeout"`
+  Timeout         string `json:"timeout"`
   //ex: 2s
-  send         string `json:"send"`
+  Send         string `json:"send"`
   Description     string   `json:"description"`
 }
 
@@ -53,23 +53,23 @@ func (s *systemScanner) Init() error {
 
 func (s *systemScanner) Scan() error {
 	for _, ioc := range s.iocs {
-    state, receive := ScanPort(ioc.ip, ioc.port, ioc.protocol, ioc.send, ioc.timeout)
+    state, receive := ScanPort(ioc.Ip, ioc.Port, ioc.Protocol, ioc.Send, ioc.Timeout)
     if state == 1 {
-      message := fmt.Sprintf("Connected to: %s:%s [] -> Open",ioc.ip,ioc.port,ioc.protocol)
+      message := fmt.Sprintf("Connected to: %s:%s [%s] - Open",ioc.Ip,ioc.Port,ioc.Protocol)
       report.AddProcInfo("connect", message,
-        "rule", ioc.Description, "port", ioc.port, "ip", ioc.ip, "protocol", ioc.protocol,
+        "rule", ioc.Description, "port", ioc.Port, "ip", ioc.Ip, "protocol", ioc.Protocol,
         "state", "open", "receive", receive,
       )
     } else if state == 0 {
-      message := fmt.Sprintf("Connected to: %s:%s [] -> Close",ioc.ip,ioc.port,ioc.protocol)
+      message := fmt.Sprintf("Connected to: %s:%s [%s] - Close",ioc.Ip,ioc.Port,ioc.Protocol)
       report.AddProcInfo("connect", message,
-        "rule", ioc.Description, "port", ioc.port, "ip", ioc.ip, "protocol", ioc.protocol,
+        "rule", ioc.Description, "port", ioc.Port, "ip", ioc.Ip, "protocol", ioc.Protocol,
         "state", "close",
       )
     } else {
-      message := fmt.Sprintf("Connected to: %s:%s [] -> Error",ioc.ip,ioc.port,ioc.protocol)
+      message := fmt.Sprintf("Connected to: %s:%s [%s] - Error",ioc.Ip,ioc.Port,ioc.Protocol)
       report.AddProcInfo("connect", message,
-        "rule", ioc.Description, "port", ioc.port, "ip", ioc.ip, "protocol", ioc.protocol,
+        "rule", ioc.Description, "port", ioc.Port, "ip", ioc.Ip, "protocol", ioc.Protocol,
         "state", "error",
       )
     }
