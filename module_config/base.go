@@ -6,4 +6,5 @@ package config
 import (
   _ "github.com/spyre-project/spyre/scanner/yara"
   _ "github.com/spyre-project/spyre/scanner/command"
+  _ "github.com/spyre-project/spyre/scanner/connect"
 )

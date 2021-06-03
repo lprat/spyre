@@ -12,6 +12,7 @@
  - autorun scan ioc (from autorunsc sysinternals for windows only)
  - logonsession (get all session user)
  - get return of command
+   try connect to host:port
  - get KB installed (only windows)
  - get user is member of admin local (windows only)
  - get local IP routed
@@ -292,6 +293,17 @@ E.G:
       "command": "c:\\windows\\System32\\ipconfig.exe",
       "commandargs": ["/displaydns"],
       "description":"cache DNS"
+    }
+  ],
+  "connect":
+  [
+    {
+      "ip": "www.google.fr",
+      "port": "80",
+      "protocol": "tcp",
+      "send": "GET / HTTP/1.0\r\n\r\n",
+      "timeout": "2s",
+      "description":"google_443"
     }
   ],
   "autorun":
