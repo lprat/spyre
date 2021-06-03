@@ -77,9 +77,9 @@ func (s *systemScanner) Scan() error {
 	return nil
 }
 
-func ScanPort(ip string, port string, protocol string, send string, timeout string) (state int, receive string) {
+func ScanPort(ip string, port string, protocol string, send string, stimeout string) (state int, receive string) {
     target := fmt.Sprintf("%s:%s", ip, port)
-    timeout, err := getTimeout(timeout)
+    timeout, err := getTimeout(stimeout)
     if err != nil {
 			timeout = time.Second * 2
 		}
